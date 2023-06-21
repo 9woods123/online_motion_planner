@@ -1,0 +1,88 @@
+<launch>
+    <!-- Vehicle's initial position -->
+
+    <arg name="robot_name" default="eca_a9"/>
+    <!-- planning params -->
+    <arg name="planning_horizon" default="50"/>
+    <arg name="replan_horizon" default="10"/>
+    <arg name="planning_resolution" default="1"/>
+    <arg name="radius_min" default="15"/>
+    <arg name="astar_iteration" default="15000" />
+    <arg name="bound_box_length" default="3" />
+    <arg name="bound_box_width" default="2" />
+    <arg name="bound_box_height" default="2" />
+    <arg name="collision_distance" default="0.5" />
+    <arg name="v_max" default="1.5" />
+    <arg name="step_min" default="2"/>
+
+
+    <!-- planning params -->
+
+
+    <!-- mapping params -->
+    <arg name="voxel_size" default="0.5"/>
+    <arg name="voxels_per_side" default="16"/>
+    <arg name="ray_length" default="50"/>
+    <arg name="method" default="fast"/>
+    <arg name="verbose_voxblox" default="false"/>
+    <!-- mapping params -->
+
+
+    <!-- sensor topic -->
+    <arg name="pointcloud_out" default="/eca_a9/blueview_m450/point_cloud"/>
+    <!-- sensor topic -->
+
+    <node name="voxblox_node" pkg="voxblox_ros" type="esdf_server" output="screen" args="-alsologtostderr">
+        <remap from="pointcloud" to="$(arg pointcloud_out)"/>
+        <param name="use_tf_transforms" value="true"/>
+        <param name="publish_tsdf_map" value="true" />
+        <param name="publish_esdf_map" value="true" />
+        <param name="tsdf_voxel_size" value="$(arg voxel_size)" />
+        <param name="tsdf_voxels_per_side" value="$(arg voxels_per_side)" />
+        <param name="color_mode" value="color" />
+        <param name="update_mesh_every_n_sec" value="1.0" />
+        <param name="method" value="$(arg method)" />
+        <param name="max_ray_length_m" value="$(arg ray_length)" />
+        <param name="allow_clear" value="true" />
+        <param name="verbose" value="$(arg verbose_voxblox)" />
+    </node>
+
+
+    <arg name="planner_config" default="planners/woods_maze_planner.yaml"/>
+    <node name="online_motion_planner_node" pkg="online_motion_planner" type="online_motion_planner_node" output="screen">
+        <remap from="online_motion_planner_node/esdf_map_in" to="voxblox_node/esdf_map_out" />
+        <remap from="online_motion_planner_node/tsdf_map_in" to="voxblox_node/tsdf_map_out" />
+        <param name="use_tf_transforms" value="false" />
+        <param name="tsdf_voxel_size" value="$(arg voxel_size)" />
+        <param name="tsdf_voxels_per_side" value="$(arg voxels_per_side)" />
+        <param name="update_mesh_every_n_sec" value="0.0" />
+        <param name="publish_traversable" value="true" />
+        <param name="publish_pointclouds" value="true" />
+
+
+        <param name="robot_name" value="/$(arg robot_name)" />
+        <param name="planning_horizon" value="$(arg planning_horizon)" />
+        <param name="replan_horizon" value="$(arg replan_horizon)" />
+        <param name="planning_resolution" value="$(arg planning_resolution)" />
+
+        <param name="radius_min" value="$(arg radius_min)" />
+        <param name="astar_iteration" value="$(arg astar_iteration)" />
+
+        <param name="bound_box_length" value="$(arg bound_box_length)" />
+        <param name="bound_box_width" value="$(arg bound_box_width)" />
+        <param name="bound_box_height" value="$(arg bound_box_height)" />
+        <param name="collision_distance" value="$(arg collision_distance)" />
+        <param name="v_max" value="$(arg v_max)" />
+        <param name="step_min" value="$(arg step_min)" />
+
+
+
+    </node>
+
+
+
+<!--    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find online_motion_planner)/rviz/online_motion_planner_vis.rviz" />-->
+
+
+
+</launch>
