@@ -7,6 +7,11 @@ CollisionDetection::CollisionDetection() {
 }
 
 
+bool CollisionDetection::getDistanceAndGradientAtPosition(
+        const Eigen::Vector3d &point, double *distance,Eigen::Vector3d *gradient) const{
+    return esdf_server_->getEsdfMapPtr()->
+    getDistanceAndGradientAtPosition(point,distance,gradient);
+}
 
 void CollisionDetection::SetMapPtr(voxblox::EsdfServer *esdf_server) {
     esdf_server_.reset(esdf_server);

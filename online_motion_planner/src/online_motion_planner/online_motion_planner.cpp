@@ -230,9 +230,6 @@ bool online_motion_planner::trajReplanHorizon() {
 bool online_motion_planner::trajCollisionDetection() {
 
 
-    // TODO , using Voxblox map
-
-
     for (auto it = smoother.get4DPath().rbegin(); it != smoother.get4DPath().rend(); ++it) {
 
         const HybridAStar::Node4D& node = *it;
@@ -307,8 +304,8 @@ void online_motion_planner::planning_loop(const ros::TimerEvent &event) {
 
             // TRACE THE PATH
             smoother.tracePath(nSolution);
+            smoother.smooth(&configurationSpace);
             smoothedPath.updatePath(smoother.get4DPath());
-
 
             if(smoother.get4DPath().size()>1)
             {
@@ -345,6 +342,7 @@ void online_motion_planner::planning_loop(const ros::TimerEvent &event) {
             ROS_INFO_STREAM("\033[1;32m hybridAStar calculation cost "<<cost<<"s \033[0m");
 
             smoother.tracePath(nSolution);
+            smoother.smooth(&configurationSpace);
             smoothedPath.updatePath(smoother.get4DPath());
 
 

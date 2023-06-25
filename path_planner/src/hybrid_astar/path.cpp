@@ -24,13 +24,11 @@ void Path::clear() {
 void Path::updatePath(const std::vector<Node4D>& nodePath) {
   path.header.stamp = ros::Time::now();
   int k = 1;
-
   for (size_t i = 0; i < nodePath.size(); ++i) {
     addSegment(nodePath[i]);
     addNode(nodePath[i], k);
     addVehicle(nodePath[i], k);
     k++;
-
   }
 
   return;

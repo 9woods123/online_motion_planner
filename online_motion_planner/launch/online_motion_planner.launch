@@ -6,7 +6,7 @@
     <arg name="planning_horizon" default="50"/>
     <arg name="replan_horizon" default="10"/>
     <arg name="planning_resolution" default="1"/>
-    <arg name="radius_min" default="15"/>
+    <arg name="radius_min" default="10"/>
     <arg name="astar_iteration" default="15000" />
     <arg name="bound_box_length" default="3" />
     <arg name="bound_box_width" default="2" />
@@ -45,6 +45,8 @@
         <param name="max_ray_length_m" value="$(arg ray_length)" />
         <param name="allow_clear" value="true" />
         <param name="verbose" value="$(arg verbose_voxblox)" />
+        <param name="esdf_max_distance_m" value="5" />
+
     </node>
 
 
@@ -58,6 +60,8 @@
         <param name="update_mesh_every_n_sec" value="0.0" />
         <param name="publish_traversable" value="true" />
         <param name="publish_pointclouds" value="true" />
+        <param name="esdf_max_distance_m" value="5" />
+
 
 
         <param name="robot_name" value="/$(arg robot_name)" />
