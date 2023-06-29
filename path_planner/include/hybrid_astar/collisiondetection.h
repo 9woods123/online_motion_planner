@@ -62,6 +62,9 @@ namespace HybridAStar {
 
             void getMapSize();
 
+            bool getDistanceAndGradientAtPosition
+            (const Eigen::Vector3d &point,double *distance,Eigen::Vector3d *gradient) const;
+
             VoxelState checkVoxelState(Eigen::Vector3d point);
 
 
