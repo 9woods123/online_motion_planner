@@ -90,7 +90,8 @@ void online_motion_planner::pub_planned_traj(std::vector<HybridAStar::Node4D> pa
 //=========  publish planned trajectory to auv controller  ===========
 //  v=0.7/d
 
-    ros::Time d(step_min_/v_max_);   //  test 0.35 is ok, too small or big are not ok
+    ros::Time d(step_min_/v_max_);   
+
 
     ros::Time last_time=traj_start_time;
     ros::Time traj_stamp;
@@ -100,7 +101,7 @@ void online_motion_planner::pub_planned_traj(std::vector<HybridAStar::Node4D> pa
     planned_traj.header.stamp=last_time;
     planned_traj.points.clear();
 
-    for (auto iter = path_nodes.rbegin(); iter != path_nodes.rend(); ++iter)
+    for (auto iter = path_nodes.begin(); iter != path_nodes.end(); ++iter)
     {
         uuv_control_msgs::TrajectoryPoint traj_point;
 

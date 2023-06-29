@@ -27,8 +27,9 @@ class Smoother {
   Eigen::Vector3d curvatureTerm();
 
     /// smoothnessCost - attempts to spread nodes equidistantly and with the same orientation
-  Eigen::Vector3d smoothnessTerm(Eigen::Vector3d xim2, Eigen::Vector3d xim1, Eigen::Vector3d xi,
-                                 Eigen::Vector3d xip1, Eigen::Vector3d xip2);
+  Eigen::Vector3d smoothnessTerm(Eigen::Vector3d xim3,Eigen::Vector3d xim2, Eigen::Vector3d xim1,
+                                   Eigen::Vector3d xi,
+                                   Eigen::Vector3d xip1, Eigen::Vector3d xip2,Eigen::Vector3d xip3);
 
   bool smooth(const HybridAStar::CollisionDetection *configurationSpace);
 
@@ -49,7 +50,9 @@ class Smoother {
   float alpha=0.1;
   float wObstacle = 0.05;
   float wCurvature = 0.01;
-  float wSmoothness = 0.2;
+
+  float wAccSmooth = 0.2;
+  float wVelSmooth = 0.2;
 
 };
 }
