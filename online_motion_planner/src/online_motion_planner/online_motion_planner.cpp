@@ -335,8 +335,8 @@ void online_motion_planner::planning_loop(const ros::TimerEvent &event) {
             HybridAStar::Node4D Goal( goal[0],goal[1],goal[2],goal[3]
                     ,0, 0, nullptr);
 
-
             visualization.clear();
+
             HybridAStar::Node4D* nSolution = hybridAstarPlanner.hybridAStar
                     (Start, Goal, configurationSpace, visualization);
             double cost=ros::Time::now().toSec()-traj_start_time.toSec();
@@ -359,7 +359,6 @@ void online_motion_planner::planning_loop(const ros::TimerEvent &event) {
                 planning_state_=PlanningState::NEWPLAN;
             }
             break;
-
         }
 
         case PlanningState::EXECUTE:
@@ -387,12 +386,7 @@ void online_motion_planner::planning_loop(const ros::TimerEvent &event) {
             planning_state_=PlanningState::UNINIT;
             break;
         }
-
     }
-
-
-
-
 
     ros::spinOnce();
 

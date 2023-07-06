@@ -12,6 +12,7 @@ int main(int argc, char *argv[]) {
     ros::NodeHandle nh("");
     ros::NodeHandle nh_private("~"); //  using private node to update parameters.
     online_motion_planner online_motion_planner(nh, nh_private);
+
     ros::spin();
     return 0;
 }
