@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/woods/uuv/mapping_ws/src/online_motion_planner/cmake-build-debug/devel/setup.sh
