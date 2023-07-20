@@ -1,0 +1,19 @@
+<launch>
+    <!-- Vehicle's initial position -->
+
+    <arg name="robot_name" default="eca_a9"/>
+
+    <!-- sensor topic -->
+    <arg name="pointcloud_out" default="/eca_a9/blueview_m450/point_cloud"/>
+    <!-- sensor topic -->
+
+    <node name="tp_map_server_node" pkg="target_probability_map" type="tp_map_server_node" output="screen" args="-alsologtostderr">
+        <remap from="robot_pose_topic" to="/$(arg robot_name)/ground_truth_to_tf_eca_a9/pose"/>
+        <remap from="sim_point_cloud" to="$(arg pointcloud_out)"/>
+    </node>
+    
+    <node name="target_detection_sim" pkg="target_probability_map" type="target_detection_sim" output="screen">
+    </node>
+
+
+</launch>
