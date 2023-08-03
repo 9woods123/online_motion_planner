@@ -5,11 +5,16 @@
 #ifndef TARGET_PROBABILITY_MAP_H
 #define TARGET_PROBABILITY_MAP_H
 
-
+#include <ros/ros.h>
 #include <unordered_map>
 #include <Eigen/Geometry>
 #include <vector>
 #include "target_probability_voxel.h"
+#include "voxel_point.h"
+#include <pcl/octree/octree.h>
+#include <pcl/octree/octree_pointcloud.h> // 如果使用了 OctreePointCloud 类
+#include <pcl/octree/octree_search.h>
+
 
 namespace tp_map
 {
@@ -33,18 +38,28 @@ namespace tp_map
     public:
         // maybe using octree is better
         typedef std::unordered_map<Eigen::Vector3i,voxel,matrix_hash<Eigen::Vector3i>> tp_hashmap;
+        typedef pcl::PointCloud<VoxelPoint> VoxelPoint_Cloud;
+        typedef typename VoxelPoint_Cloud::Ptr VoxelPoint_CloudPTR;
+        typedef pcl::octree::OctreePointCloudSearch<VoxelPoint> OctreeType;
+
 
         target_probability_map(double map_resolution, double occur_threshold, double free_threshold);
         Eigen::Vector3i PointToIndex(Eigen::Vector3d point);
         Eigen::Vector3d IndexToVoxelCenter(Eigen::Vector3i index);
         bool updateProbabilityAtPosition(Eigen::Vector3d point,double observe_prob);
+        bool radiusSearch(Eigen::Vector3d search_point,float raduis,
+                          std::vector<Eigen::Vector3d>& existPoints,std::vector<float>& existDists);
         bool updateProbBySensor();
         void changeVoxelState(voxel* v);
         double getMapResolution();
         bool calculateFrontiers();
         tp_hashmap* getMap();
+        OctreeType* getOctree();
 
     private:
+
+
+
 
         double map_resolution_;
         double occur_threshold;
@@ -56,29 +71,23 @@ namespace tp_map
         std::vector<voxel*>  changed_voxels;
         std::vector<voxel*>  frontiers;
 
+
+        float resolution = 1.0f;     // Voxel size
+
+//        typedef pcl::PointCloud<VoxelPoint> PointCloud;
+//        typedef typename PointCloud::Ptr PointCloudPtr;
+//        typedef pcl::octree::OctreePointCloudSearch<VoxelPoint> OctreeType;
+//        typename OctreeType::Ptr octree;
+//        PointCloudPtr cloud;
+
+
+        OctreeType octree;
+        VoxelPoint_CloudPTR cloud;
+
+
     };
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 #endif //TARGET_PROBABILITY_MAP_H

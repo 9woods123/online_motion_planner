@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
     ros::init(argc, argv, "target_probability_map");
     ros::NodeHandle nh("");
     ros::NodeHandle nh_private("~"); //  using private node to update parameters.
-    tp_map::tp_map_server tp_map_server(nh, nh_private);
+    tp_map::tp_map_server tp_map_server(nh,nh_private,0.1,0.25,0.85);
     ros::spin();
     return 0;
 }

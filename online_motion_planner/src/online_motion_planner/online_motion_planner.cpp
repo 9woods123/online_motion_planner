@@ -27,8 +27,6 @@ online_motion_planner::online_motion_planner(const ros::NodeHandle &nh,
     goal_sub=nh_.subscribe("/goal",
                            10, &online_motion_planner::goalCallback,this);
 
-
-
     local_planning_timer=nh_.createTimer(rate_.expectedCycleTime(),
                                          &online_motion_planner::planning_loop,this);
 
@@ -45,6 +43,7 @@ void online_motion_planner::initPlanner() {
     nh_private_.param<float>("radius_min", radius_min_, 10);
     nh_private_.param<float>("planning_resolution", planning_resolution_, 0.5);
     nh_private_.param<int>("astar_iteration", astar_iteration_, 15000);
+    nh_private_.param<bool>("is_z_axis_considered_goal_check", is_z_axis_considered_goal_check_, true);
 
     nh_private_.param<float>("bound_box_length", bound_box_length_, 2);
     nh_private_.param<float>("bound_box_width", bound_box_width_, 1);
@@ -60,6 +59,7 @@ void online_motion_planner::initPlanner() {
     hybridAstarPlanner.setMinStep(step_min_);
     hybridAstarPlanner.setResolution(planning_resolution_);
     hybridAstarPlanner.setMinRadius(radius_min_);
+    hybridAstarPlanner.setGoalCheck(is_z_axis_considered_goal_check_);
     HybridAStar::Node4D::setMotionPrims();
 
     configurationSpace.setBoundBox(bound_box_length_,bound_box_width_,bound_box_height_);

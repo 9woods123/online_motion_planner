@@ -71,7 +71,7 @@ private:
     float search_horizon3d=45;
     bool  threeD_hybrid=false;
     float planning_step;
-
+    bool  is_z_axis_considered_goal_check=true;
 
     priorityQueue Open;         // This list realize the compared insertion
     // update h value
@@ -110,14 +110,9 @@ public:
   Eigen::Vector3i NodeToIndex3d(Node3D node);
   void setResolution(float resolution){planning_resolution=resolution;}
   void setSearchHorizon(float horizon){search_horizon=horizon;}
-  void setMinStep(float step){planning_step=step;
-      HybridAStar::Node4D::setMinStep(step);}
-  void setMinRadius(float r){
-       radius_min_=r;
-       HybridAStar::Node4D::setMinRadius(radius_min_);
-       }
-
-
+  void setMinStep(float step){planning_step=step;  HybridAStar::Node4D::setMinStep(step);}
+  void setMinRadius(float r){ radius_min_=r; HybridAStar::Node4D::setMinRadius(radius_min_);}
+  void setGoalCheck(bool signal){is_z_axis_considered_goal_check=signal;}
 
 };
 }

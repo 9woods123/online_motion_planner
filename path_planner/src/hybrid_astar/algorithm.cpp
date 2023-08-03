@@ -11,8 +11,16 @@ bool Algorithm::GotGoal(Node4D& current, const Node4D& goal){
 
     Eigen::Vector4i goal_id=NodeToIndex(goal);
     Eigen::Vector4i curr_id=NodeToIndex(current);
+    double e_dis;
+    if(is_z_axis_considered_goal_check)
+    {
+        e_dis=std::sqrt(SQ(goal_id[0]-curr_id[0])+SQ(goal_id[1]-curr_id[1])+SQ(goal_id[2]-curr_id[2]));
+    }
+    else
+    {
+        e_dis=std::sqrt(SQ(goal_id[0]-curr_id[0])+SQ(goal_id[1]-curr_id[1]));
+    }
 
-    double e_dis=std::sqrt(SQ(goal_id[0]-curr_id[0])+SQ(goal_id[1]-curr_id[1])+SQ(goal_id[2]-curr_id[2]));
     double yaw_dis=std::abs(goal_id[3]-curr_id[3]);
     yaw_dis=std::min(yaw_dis,(2*M_PI-yaw_dis));
 
@@ -22,7 +30,7 @@ bool Algorithm::GotGoal(Node4D& current, const Node4D& goal){
 //    std::cout<<"    e_dis=="<<e_dis<<"  yaw_dis=="<<yaw_dis/M_PI<<" pi "<<std::endl;
 
     // debug goal 1.99 pi, curr 0.05 pi, the yaw dis=1.94pi , however, we exc
-    if(e_dis>2*planning_step/planning_resolution||yaw_dis>0.25*M_PI)
+    if(e_dis>4*planning_step/planning_resolution||yaw_dis>0.25*M_PI)
     {
         return false;
     }
@@ -328,7 +336,7 @@ void Algorithm::updateH(Node4D& start, const Node4D& goal,CollisionDetection& co
   // TODO   realize  astar  3d(x,y,z)  search ,  and updateH()
   // if twoD heuristic is activated determine shortest path
   // unconstrained with obstacles
-//
+
 
 
     Node3D start3d(start.getX(),start.getY(),start.getZ(),start.getG(),start.getH(), nullptr);

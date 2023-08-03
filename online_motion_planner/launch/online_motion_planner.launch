@@ -3,7 +3,7 @@
 
     <arg name="robot_name" default="eca_a9"/>
     <!-- planning params -->
-    <arg name="planning_horizon" default="50"/>
+    <arg name="planning_horizon" default="35"/>
     <arg name="replan_horizon" default="10"/>
     <arg name="planning_resolution" default="1"/>
     <arg name="radius_min" default="15"/>
@@ -13,8 +13,10 @@
     <arg name="bound_box_height" default="2" />
     <arg name="collision_distance" default="0.5" />
     <arg name="v_max" default="2" />
-    <arg name="a_max" default="0.1" />
+    <arg name="a_max" default="0.25" />
     <arg name="step_min" default="2"/>
+    <arg name="is_z_axis_considered_goal_check" default="false"/>
+
 
 
     <!-- planning params -->
@@ -23,11 +25,12 @@
     <!-- mapping params -->
     <arg name="voxel_size" default="0.5"/>
     <arg name="voxels_per_side" default="16"/>
-    <arg name="ray_length" default="50"/>
+    <arg name="ray_length" default="40"/>
     <arg name="method" default="fast"/>
     <arg name="verbose_voxblox" default="false"/>
     <!-- mapping params -->
 
+<!--    <arg name="pointcloud_out" default="/fake_sensor"/>-->
 
     <!-- sensor topic -->
     <arg name="pointcloud_out" default="/eca_a9/blueview_m450/point_cloud"/>
@@ -47,6 +50,7 @@
         <param name="allow_clear" value="true" />
         <param name="verbose" value="$(arg verbose_voxblox)" />
         <param name="esdf_max_distance_m" value="5" />
+        <param name="publish_pointclouds_on_update" value="true" />
 
     </node>
 
@@ -69,9 +73,10 @@
         <param name="planning_horizon" value="$(arg planning_horizon)" />
         <param name="replan_horizon" value="$(arg replan_horizon)" />
         <param name="planning_resolution" value="$(arg planning_resolution)" />
-
         <param name="radius_min" value="$(arg radius_min)" />
         <param name="astar_iteration" value="$(arg astar_iteration)" />
+        <param name="is_z_axis_considered_goal_check" value="$(arg is_z_axis_considered_goal_check)" />
+
 
         <param name="bound_box_length" value="$(arg bound_box_length)" />
         <param name="bound_box_width" value="$(arg bound_box_width)" />
@@ -82,6 +87,11 @@
         <param name="step_min" value="$(arg step_min)" />
     </node>
 
+    <include file="$(find online_motion_planner)/launch/eca9_a9_upload.launch">
+    </include>
+
+    <include file="$(find target_probability_map)/launch/target_detection_sim.launch">
+    </include>
 <!--    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find online_motion_planner)/rviz/online_motion_planner_vis.rviz" />-->
 
 </launch>

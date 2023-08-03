@@ -99,7 +99,7 @@ private:
     float radius_min_;
     int   astar_iteration_;
     float step_min_;
-
+    bool is_z_axis_considered_goal_check_;
 
     float bound_box_length_;
     float bound_box_width_;

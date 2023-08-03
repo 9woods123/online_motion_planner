@@ -2,25 +2,45 @@
 // Created by woods on 2023/7/3.
 //
 #include "target_probability_map/target_probability_map.h"
-
-
+#include "chrono"
 namespace tp_map {
 
     target_probability_map::target_probability_map(double map_resolution,
                                                    double occur_threshold,
                                                    double free_threshold):
-        map_resolution_(map_resolution),
-        occur_threshold(occur_threshold),
-        free_threshold(free_threshold) {
+            map_resolution_(map_resolution),
+            occur_threshold(occur_threshold),
+            free_threshold(free_threshold),
+            octree(0.1f)
+
+    {
 
         map_.clear();
         changed_voxels.clear();
         map_origin_<<0,0,0;
+
+
+        cloud.reset(new VoxelPoint_Cloud);
+        cloud->points.push_back(VoxelPoint(0,0,0));
+
+
+        //TODO the boudning box is defined, but static.
+        double minx, miny, minz, maxx, maxy, maxz;
+        minx=-200;miny=-200;minz=-100;maxx=200;maxy=200;maxz=0;
+        octree.defineBoundingBox(minx, miny, minz, maxx, maxy, maxz);
+        // the boudning box is defined, but static.
+
+        octree.setInputCloud(cloud);
+        octree.addPointsFromInputCloud();
     }
 
     Eigen::Vector3i target_probability_map::PointToIndex(Eigen::Vector3d point) {
         Eigen::Vector3i index = ((point - map_origin_) / map_resolution_).array().floor().cast<int>();
         return index;
+    }
+
+    target_probability_map::OctreeType* target_probability_map::getOctree() {
+        return &octree;
     }
 
     Eigen::Vector3d target_probability_map::IndexToVoxelCenter(Eigen::Vector3i index) {
@@ -102,35 +122,77 @@ namespace tp_map {
             }
             voxel_->target_search_state=UNKNOWN;
         }
-
     }
 
     bool target_probability_map::updateProbBySensor() {
-
         // TODO use updateProbabilityAtPosition here to update every detected point.
+    }
+
+    bool target_probability_map::radiusSearch(Eigen::Vector3d search_point, float radius,
+                                              std::vector<Eigen::Vector3d> &existPoints,
+                                              std::vector<float> &existDists) {
+        //  0.05ms 左右
+        auto start = std::chrono::high_resolution_clock::now();
+
+        VoxelPoint searchPoint( search_point.x(),search_point.y(),search_point.z()); // 设置要搜索的点
+
+        std::vector<int> k_indices;
+        std::vector<float> k_sqr_distances;
+
+        int num_neighbors = octree.radiusSearch(searchPoint, radius, k_indices, k_sqr_distances);
+
+        for (int i = 0; i < num_neighbors; ++i) {
+            int index = k_indices[i];
+            float distance = k_sqr_distances[i];
+        }
+
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> elapsed = end - start;
+//        std::cout << "octreeSearchCallback  cost==" << elapsed.count() << " ms" << std::endl;
 
     }
 
     bool target_probability_map::updateProbabilityAtPosition(Eigen::Vector3d point, double observe_prob) {
 
         Eigen::Vector3i index = PointToIndex(point);
-        // add a new voxel if
-        voxel new_voxel(index);
-        auto iterator = map_.emplace(index, new_voxel);
-        if (!iterator.second) {
-            // 元素已存在，可以通过迭代器访问现有的元素
-            voxel& existingVoxel = iterator.first->second;
-            double prior_prob = existingVoxel.probability; // 先获取先验概率
+//        VoxelPoint search(index.x(),index.y(),index.z());
+        VoxelPoint search(point.x(),point.y(),point.z());
+
+        std::vector<int> point_index;
+
+        // test
+//        std::vector<Eigen::Vector3d> existPoints;
+//        std::vector<float> existDists;
+//        radiusSearch(point,50,existPoints,existDists);
+        // test
+
+        octree.voxelSearch(search, point_index);
+        if (!point_index.empty()) {
+            // Voxel contains points, access the points using the indices
+            for (const int& idx : point_index) {
+//              std::cout<<"voxelSearch found"<<std::endl;
+                VoxelPoint* point_in_voxel = &cloud->points[idx];
+                double prior_prob = point_in_voxel->probability; // 先获取先验概率
+                double posterior_prob = (observe_prob * prior_prob)
+                                    / (observe_prob * prior_prob + (1 - observe_prob) * (1 - prior_prob));
+                // 使用贝叶斯更新计算后验概率
+                point_in_voxel->probability = posterior_prob; // 更新概率值
+//                std::cout<<"cloud size=="<<cloud->size()<<std::endl;
+                //changeVoxelState();
+            }
+
+        } else {
+            // Voxel does not contain any points
+            VoxelPoint new_point(point.x(),point.y(),point.z()); // push back the real data which has not been processed by floor();
+            double prior_prob = new_point.probability; // 先获取先验概率
             double posterior_prob = (observe_prob * prior_prob)
                                     / (observe_prob * prior_prob + (1 - observe_prob) * (1 - prior_prob));
             // 使用贝叶斯更新计算后验概率
-            existingVoxel.probability = posterior_prob; // 更新概率值
-            changeVoxelState(&existingVoxel);// change voxel state according to the probability.
+            new_point.probability = posterior_prob; // 更新概率值
+            octree.addPointToCloud(new_point,cloud);
 
-        } else {
-            // 元素是新插入的
-            // do nothing
         }
+
         return true;
     }
 

@@ -15,6 +15,8 @@ find_package(catkin REQUIRED COMPONENTS
         roscpp
         rospy
         std_msgs
+        detect_msgs
+        tf
         )
 
 set(SOURCES
@@ -29,6 +31,7 @@ set(SOURCES
 set(HEADERS
         ${CMAKE_CURRENT_SOURCE_DIR}/include/target_probability_map/target_probability_map.h
         ${CMAKE_CURRENT_SOURCE_DIR}/include/target_probability_map/target_probability_voxel.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/target_probability_map/voxel_point.h
         ${CMAKE_CURRENT_SOURCE_DIR}/include/target_probability_map/tp_map_server.h
         )
 
@@ -36,31 +39,49 @@ set(HEADERS
 
 
 find_package(Eigen3 REQUIRED)
-find_package(PCL REQUIRED)
+find_package(PCL 1.8 REQUIRED)
 include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
+
 
 # 添加可执行文件
 #cs_add_executable(my_node ${SOURCES})
 
 # 添加库文件
 
+
 cs_add_library(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 cs_add_executable(tp_map_server_node ${SOURCES} ${HEADERS})
 
-cs_add_executable(target_detection_sim
-        src/target_detection_sim/target_detection_sim.cpp
-        include/target_detection_sim/target_detection_sim.h
-      )
+
+
 
 target_link_libraries(${PROJECT_NAME}
         ${catkin_LIBRARIES}
         ${EIGEN3_LIBRARIES}
+        ${PCL_LIBRARIES}
+        )
+
+cs_add_executable(target_detection_sim
+        src/target_detection_sim/target_detection_sim.cpp
+        include/target_detection_sim/target_detection_sim.h
         )
 
 target_link_libraries(target_detection_sim ${catkin_LIBRARIES}
         ${PCL_LIBRARIES}  ${EIGEN3_LIBRARIES})
+
+
+
+
+
+cs_add_executable(test
+        src/target_probability_map/test.cpp
+        )
+target_link_libraries(test ${catkin_LIBRARIES}
+        ${PCL_LIBRARIES}
+        )
+
 
 cs_install()
 cs_export()
