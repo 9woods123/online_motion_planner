@@ -50,6 +50,7 @@ namespace tp_map
         bool radiusSearch(Eigen::Vector3d search_point,float raduis,
                           std::vector<Eigen::Vector3d>& existPoints,std::vector<float>& existDists);
         bool updateProbBySensor();
+        void setCollisionRadius(float collision_radius_);
         void changeVoxelState(voxel* v);
         double getMapResolution();
         bool calculateFrontiers();
@@ -67,18 +68,15 @@ namespace tp_map
         Eigen::Vector3d map_origin_;
 
 
+
         tp_hashmap map_;
         std::vector<voxel*>  changed_voxels;
         std::vector<voxel*>  frontiers;
 
-
+//      params
         float resolution = 1.0f;     // Voxel size
+        float collision_radius=5;
 
-//        typedef pcl::PointCloud<VoxelPoint> PointCloud;
-//        typedef typename PointCloud::Ptr PointCloudPtr;
-//        typedef pcl::octree::OctreePointCloudSearch<VoxelPoint> OctreeType;
-//        typename OctreeType::Ptr octree;
-//        PointCloudPtr cloud;
 
 
         OctreeType octree;

@@ -49,6 +49,7 @@ namespace tp_map{
         double target_occ_radius=0.5;
         double local_sensing_radius=25;
         double sensing_frequency=5; //HZ
+        float collision_radius=5;
 
 
     public:

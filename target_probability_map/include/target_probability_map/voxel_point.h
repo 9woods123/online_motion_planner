@@ -21,7 +21,13 @@ struct VoxelPoint
         z=_z;
         probability=0.5;
     }
-
+    VoxelPoint(float _x,float _y,float _z,float _p)
+    {
+        x=_x;
+        y=_y;
+        z=_z;
+        probability=_p;
+    }
     VoxelPoint()
     {
 

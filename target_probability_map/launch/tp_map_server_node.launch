@@ -2,11 +2,13 @@
     <!-- Vehicle's initial position -->
 
     <arg name="robot_name" default="eca_a9"/>
+    <arg name="collision_radius" default="4"/>
 
     <!-- sensor topic -->
     <node name="tp_map_server_node" pkg="target_probability_map" type="tp_map_server_node" output="screen" args="-alsologtostderr">
         <remap from="robot_pose_topic" to="/$(arg robot_name)/ground_truth_to_tf_eca_a9/pose"/>
         <remap from="detect_info_topic" to="/detect_info"/>
+        <param name="collision_radius" value="$(arg collision_radius)" />
     </node>
     
 <!--    <node name="target_detection_sim" pkg="target_probability_map" type="target_detection_sim" output="screen">-->

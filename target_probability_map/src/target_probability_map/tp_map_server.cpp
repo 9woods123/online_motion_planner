@@ -18,6 +18,12 @@ namespace tp_map {
         marker_pub=nh_.advertise<visualization_msgs::MarkerArray>("map_markers", 1);
         tp_map_.reset(new target_probability_map(map_resolution,occur_threshold,free_threshold));
 
+
+        //set params;
+        nh_private_.param<float>("collision_radius", collision_radius, 5);
+        tp_map_->setCollisionRadius(collision_radius);
+
+
     }
 
     void tp_map_server::DetectCallback(const detect_msgs::Detect::ConstPtr &msg) {
@@ -48,9 +54,9 @@ namespace tp_map {
             marker.pose.position.y = entry.y;
             marker.pose.position.z = entry.z;
             //TODO using ros param, to set radius.
-            marker.scale.x = 8; // Set the marker size based on your map data
-            marker.scale.y = 8;
-            marker.scale.z = 8;
+            marker.scale.x = 2*collision_radius; // Set the marker size based on your map data
+            marker.scale.y = 2*collision_radius;
+            marker.scale.z = 2*collision_radius;
             marker.color.r = 1.0; // Set the marker color based on your map data
             marker.color.g = 0.0;
             marker.color.b = 0.0;

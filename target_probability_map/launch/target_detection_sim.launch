@@ -2,10 +2,13 @@
     <!-- Vehicle's initial position -->
 
     <arg name="robot_name" default="eca_a9"/>
+    <arg name="target_sphere_radius" default="10"/>
+
 
 
     <node name="target_detection_sim" pkg="target_probability_map" type="target_detection_sim" output="screen">
         <remap from="robot_pose_topic" to="/$(arg robot_name)/ground_truth_to_tf_eca_a9/pose"/>
+        <param name="target_sphere_radius" value="$(arg target_sphere_radius)" />
     </node>
 
 

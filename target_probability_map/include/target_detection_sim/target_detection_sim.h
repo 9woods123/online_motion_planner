@@ -18,7 +18,7 @@
 class target_detection_sim {
 
 public:
-    target_detection_sim(ros::NodeHandle nh);
+    target_detection_sim(ros::NodeHandle nh,ros::NodeHandle nh_private);
 
     void poseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg);
     void sensorCallback(const ros::TimerEvent& event);
@@ -38,6 +38,8 @@ public:
 private:
 
     ros::NodeHandle nh_;
+    ros::NodeHandle nh_private_;
+
     ros::Subscriber robot_pose_sub_;
     ros::Subscriber sonnar_sub_;
     ros::Publisher pointcloud_pub_;

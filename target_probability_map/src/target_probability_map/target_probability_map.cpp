@@ -21,7 +21,7 @@ namespace tp_map {
 
 
         cloud.reset(new VoxelPoint_Cloud);
-        cloud->points.push_back(VoxelPoint(0,0,0));
+        cloud->points.push_back(VoxelPoint(0,0,0,0));
 
 
         //TODO the boudning box is defined, but static.
@@ -39,6 +39,9 @@ namespace tp_map {
         return index;
     }
 
+    void target_probability_map::setCollisionRadius(float collision_radius_) {
+    collision_radius=collision_radius_;
+    }
     target_probability_map::OctreeType* target_probability_map::getOctree() {
         return &octree;
     }

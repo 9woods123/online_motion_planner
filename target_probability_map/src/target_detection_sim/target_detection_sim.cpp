@@ -4,8 +4,8 @@
 #include "target_detection_sim/target_detection_sim.h"
 #include <tf/transform_listener.h>
 
-target_detection_sim::target_detection_sim(ros::NodeHandle nh)
-        : nh_(nh), octree_(resolution) {
+target_detection_sim::target_detection_sim(ros::NodeHandle nh,ros::NodeHandle nh_private)
+        : nh_(nh),nh_private_(nh_private), octree_(resolution) {
 
     // Initialize subscribers and publishers
     robot_pose_sub_ = nh_.subscribe("robot_pose_topic", 10, &target_detection_sim::poseCallback, this);
@@ -22,6 +22,11 @@ target_detection_sim::target_detection_sim(ros::NodeHandle nh)
     octree_search_timer_ = nh_.createTimer(ros::Duration(1.0), &target_detection_sim::octreeSearchCallback, this);
     sensor_timer_ = nh_.createTimer(ros::Duration(0.1), &target_detection_sim::sensorCallback, this);
     vis_timer_ = nh_.createTimer(ros::Duration(0.1), &target_detection_sim::visCallback, this);
+
+
+
+    nh_private_.param<float>("target_sphere_radius", target_sphere_radius, 4);
+
 
 }
 
@@ -266,7 +271,8 @@ bool target_detection_sim::lookforTransform(std::string target_frame, std::strin
 int main(int argc, char** argv) {
     ros::init(argc, argv, "target_detection_node");
     ros::NodeHandle nh;
-    target_detection_sim sim(nh);
+    ros::NodeHandle nh_private("~");
+    target_detection_sim sim(nh,nh_private);
     ros::spin();
     return 0;
 }
