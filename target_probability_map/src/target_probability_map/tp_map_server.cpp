@@ -22,13 +22,15 @@ namespace tp_map {
         //set params;
         nh_private_.param<float>("collision_radius", collision_radius, 5);
         tp_map_->setCollisionRadius(collision_radius);
-
-
     }
 
     void tp_map_server::DetectCallback(const detect_msgs::Detect::ConstPtr &msg) {
         detect_info=*msg;
         updateProbBySensor(&detect_info);
+    }
+
+    std::shared_ptr<target_probability_map> tp_map_server::getmapPtr() {
+        return tp_map_;
     }
 
     void tp_map_server::visCallback(const ros::TimerEvent &event) {
@@ -89,5 +91,10 @@ namespace tp_map {
     bool tp_map_server::updateProbabilityAtPosition(Eigen::Vector3d point, double observe_prob){
         tp_map_->updateProbabilityAtPosition(point,observe_prob);
     }
+
+    float tp_map_server::getCollisionRadius() {
+        return collision_radius;
+    }
+
 
 }

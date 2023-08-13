@@ -135,7 +135,6 @@ namespace tp_map {
                                               std::vector<Eigen::Vector3d> &existPoints,
                                               std::vector<float> &existDists) {
         //  0.05ms 左右
-        auto start = std::chrono::high_resolution_clock::now();
 
         VoxelPoint searchPoint( search_point.x(),search_point.y(),search_point.z()); // 设置要搜索的点
 
@@ -146,12 +145,15 @@ namespace tp_map {
 
         for (int i = 0; i < num_neighbors; ++i) {
             int index = k_indices[i];
-            float distance = k_sqr_distances[i];
+            float distance = std::sqrt(k_sqr_distances[i]);
+            existPoints.emplace_back(Eigen::Vector3d(
+                                    cloud->points[index].x,
+                                    cloud->points[index].y,
+                                    cloud->points[index].z));
+            existDists.emplace_back(distance);
         }
 
-        auto end = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double, std::milli> elapsed = end - start;
-//        std::cout << "octreeSearchCallback  cost==" << elapsed.count() << " ms" << std::endl;
+
 
     }
 

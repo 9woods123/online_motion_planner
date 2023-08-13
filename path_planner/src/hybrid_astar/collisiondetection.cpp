@@ -2,19 +2,58 @@
 
 using namespace HybridAStar;
 
+
+
 CollisionDetection::CollisionDetection() {
     esdf_server_= nullptr;
+    tp_server_= nullptr;
+
 }
 
 
+void CollisionDetection::initConfiguration(const ros::NodeHandle &nh, const ros::NodeHandle &nh_private,
+                                       const double map_resolution, const double occur_threshold,
+                                       const double free_threshold) {
+
+    esdf_server_.reset(new voxblox::EsdfServer(nh, nh_private));   // begin an esdf ros process
+    esdf_server_->setTraversabilityRadius(0.2);
+    tp_server_.reset(new tp_map::tp_map_server(nh,nh_private,0.1,0.25,0.85));
+
+}
+
+void CollisionDetection::initObstacleList(const HybridAStar::Node4D *start,float search_horizon) {
+
+//    auto start_time = std::chrono::high_resolution_clock::now();
+
+        obstacle_list.clear();
+        std::vector<float> existDists;
+
+        tp_server_->getmapPtr()->radiusSearch(
+                Eigen::Vector3d (start->getX(),start->getY(),start->getZ())
+                ,search_horizon,obstacle_list,existDists);
+
+//    for(auto d :existDists)
+//    {
+//        std::cout<<" "<<d<<",";
+//    }
+//    std::cout<<std::endl;
+//
+//    auto end_time = std::chrono::high_resolution_clock::now();
+//    std::chrono::duration<double, std::milli> elapsed = end_time - start_time;
+//    std::cout << "initObstacleList  cost==" << elapsed.count() << " ms" << std::endl;
+
+}
+
 bool CollisionDetection::getDistanceAndGradientAtPosition(
         const Eigen::Vector3d &point, double *distance,Eigen::Vector3d *gradient) const{
+
     return esdf_server_->getEsdfMapPtr()->
     getDistanceAndGradientAtPosition(point,distance,gradient);
 }
 
 void CollisionDetection::SetMapPtr(voxblox::EsdfServer *esdf_server) {
     esdf_server_.reset(esdf_server);
+
 }
 
 
@@ -31,9 +70,19 @@ void CollisionDetection::getMapSize() {
 
 VoxelState CollisionDetection::checkVoxelState(Eigen::Vector3d point) {
 
-//    std::cout<< "checkVoxelState"<<std::endl;
     double distance = 0.0;
     double c_voxel_distance=collision_distance_;
+
+    for(auto obstacle : obstacle_list)
+    {
+        Eigen::Vector3d diff = point - obstacle;
+        double distance = diff.norm();
+        if (distance<tp_server_->getCollisionRadius())
+        {
+            return  VoxelState::occupied;
+        }
+    }
+
 
     if (esdf_server_->getEsdfMapPtr()->getDistanceAtPosition(point, &distance))
     {

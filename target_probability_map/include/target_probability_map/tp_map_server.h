@@ -70,7 +70,8 @@ namespace tp_map{
         bool updateProbBySensor(const detect_msgs::Detect* detect_info);
         void generateLocalSensing();
         bool getTPmap();
-
+        std::shared_ptr<target_probability_map> getmapPtr();
+        float getCollisionRadius();
     };
 
 }

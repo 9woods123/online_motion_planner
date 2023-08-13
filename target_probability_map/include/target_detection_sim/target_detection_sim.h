@@ -60,9 +60,9 @@ private:
     double maxX = 180;
     double minY = -200;
     double maxY = 200;
-    double minZ = -70;
+    double minZ = -80;
     double maxZ = -99;
-    size_t target_number = 350; // Number of points
+    size_t target_number = 400; // Number of points
     float  target_sphere_radius=4;
 
     float search_radius = 40.0f; // Search radius for finding points within the given distance

@@ -19,7 +19,10 @@
     </include>
 
 
-    <include file="$(find eca_a9_control)/launch/start_geometric_tracking_control.launch"/>
+    <include file="$(find eca_a9_control)/launch/start_geometric_tracking_control.launch">
+        <arg name="output2Screen" value="log"/>
+    </include>
+
 
 
 

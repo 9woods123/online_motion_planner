@@ -57,6 +57,8 @@ namespace tp_map
         tp_hashmap* getMap();
         OctreeType* getOctree();
 
+
+
     private:
 
 
@@ -81,6 +83,10 @@ namespace tp_map
 
         OctreeType octree;
         VoxelPoint_CloudPTR cloud;
+        // the obstacle infor are stored in cloud,
+        // push point into "VoxelPoint_CloudPTR cloud"
+        // when new update msgs are received.
+        // so we need an update_msgs, when new
 
 
     };

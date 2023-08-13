@@ -78,8 +78,8 @@ private:
     /// The visualization used for search visualization
     HybridAStar::Visualize visualization;
     /// The collission detection for testing specific configurations
+//    std::shared_ptr<HybridAStar::CollisionDetection> configurationSpace;
     HybridAStar::CollisionDetection configurationSpace;
-
     HybridAStar::Algorithm hybridAstarPlanner;
 
     ros::Time  traj_start_time;

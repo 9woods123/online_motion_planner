@@ -20,6 +20,7 @@ find_package(catkin REQUIRED COMPONENTS
     octomap_msgs
     interactive_markers
     uuv_control_msgs
+    target_probability_map
     )
 
     set(SOURCES

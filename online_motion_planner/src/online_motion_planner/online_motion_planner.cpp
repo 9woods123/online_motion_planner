@@ -9,10 +9,10 @@ online_motion_planner::online_motion_planner(const ros::NodeHandle &nh,
                           : nh_(nh), nh_private_(nh_private), rate_(10.0) {
 
     initPlanner();
-
-    esdf_server_.reset(new voxblox::EsdfServer(nh_, nh_private_));   // begin an esdf ros process
-    esdf_server_->setTraversabilityRadius(0.2);
-    configurationSpace.SetMapPtr(esdf_server_.get());
+    configurationSpace.initConfiguration(nh_, nh_private_,0.1,0.25,0.85);
+//    esdf_server_.reset(new voxblox::EsdfServer(nh_, nh_private_));   // begin an esdf ros process
+//    esdf_server_->setTraversabilityRadius(0.2);
+//    configurationSpace.SetMapPtr(esdf_server_.get());
 
 
 
@@ -301,7 +301,7 @@ void online_motion_planner::planning_loop(const ros::TimerEvent &event) {
 
             HybridAStar::Node4D* nSolution = hybridAstarPlanner.hybridAStar
                     (Start, Goal, configurationSpace, visualization);
-            double cost=ros::Time::now().toSec()-traj_start_time.toSec();
+            double cost=ros::Time::now().toSec() - traj_start_time.toSec();
             ROS_INFO_STREAM("\033[1;32m HybridAStar calculation cost "<<cost<<"s \033[0m");
 
 
