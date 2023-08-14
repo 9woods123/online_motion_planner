@@ -14,24 +14,40 @@ void Smoother::debugPath() {
 
 }
 
-Eigen::Vector3d Smoother::obstacleTerm(Eigen::Vector3d xi,
-                             const HybridAStar::CollisionDetection *configurationSpace){
+Eigen::Vector3d
+Smoother::targetobstacleTerm(Eigen::Vector3d xi,
+                             const HybridAStar::CollisionDetection *configurationSpace) {
 
-  Eigen::Vector3d obstacleGradient;
-  double d_threshold=2.5;
-  double distance;
-  if(configurationSpace->
-  getDistanceAndGradientAtPosition(xi, &distance,&obstacleGradient))
-  {
-      if(distance<d_threshold)
-      {
-          return -wObstacle*obstacleGradient;
-      }
-
-  }
-
-      return Eigen::Vector3d(0,0,0);
+    Eigen::Vector3d targetobstacleGradient;
+    if(configurationSpace->getTargetObstacleGradient(xi,&targetobstacleGradient))
+    {
+        return -wtargetObstacle*targetobstacleGradient;
+    }
+    return Eigen::Vector3d(0,0,0);
 }
+
+Eigen::Vector3d Smoother::obstacleTerm(Eigen::Vector3d xi,
+                                       const HybridAStar::CollisionDetection *configurationSpace){
+
+    // TODO add a gradient calculated by considering the targets.
+
+    Eigen::Vector3d obstacleGradient;
+    double d_threshold=2.5;
+    double distance;
+    if(configurationSpace->
+            getDistanceAndGradientAtPosition(xi, &distance,&obstacleGradient))
+    {
+        if(distance<d_threshold)
+        {
+            return -wObstacle*obstacleGradient;
+        }
+
+    }
+
+    return Eigen::Vector3d(0,0,0);
+}
+
+
 
 Eigen::Vector3d Smoother::smoothnessTerm(Eigen::Vector3d xim3, Eigen::Vector3d xim2, Eigen::Vector3d xim1,
                                          Eigen::Vector3d xi, Eigen::Vector3d xip1, Eigen::Vector3d xip2,
@@ -174,7 +190,7 @@ std::vector<double> Smoother:: getSegmentTimes(std::vector<Node4D>* path, double
      std::vector<Node4D> newPath = fourDpath;
 
      // ================== an  optimization calculating by adjust the wapypoint===================
-     float totalWeight = wAccSmooth + wVelSmooth +  wObstacle;
+     float totalWeight = wAccSmooth + wVelSmooth +  wObstacle + wtargetObstacle;
      std::vector<Node4D> temp_path=newPath;
      while (iterations < maxIterations) {
          // choose the first three nodes of the path
@@ -191,6 +207,7 @@ std::vector<double> Smoother:: getSegmentTimes(std::vector<Node4D>* path, double
 
              correction = correction + smoothnessTerm(xim3, xim2, xim1, xi, xip1, xip2, xip3);
              correction = correction + obstacleTerm(xi,configurationSpace);
+             correction = correction + targetobstacleTerm(xi,configurationSpace);
 
              //  gradient descent
              xi = xi - alpha * correction/totalWeight;

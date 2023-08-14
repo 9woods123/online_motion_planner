@@ -23,39 +23,51 @@ void CollisionDetection::initConfiguration(const ros::NodeHandle &nh, const ros:
 
 void CollisionDetection::initObstacleList(const HybridAStar::Node4D *start,float search_horizon) {
 
-//    auto start_time = std::chrono::high_resolution_clock::now();
-
         obstacle_list.clear();
         std::vector<float> existDists;
-
-        tp_server_->getmapPtr()->radiusSearch(
-                Eigen::Vector3d (start->getX(),start->getY(),start->getZ())
-                ,search_horizon,obstacle_list,existDists);
-
-//    for(auto d :existDists)
-//    {
-//        std::cout<<" "<<d<<",";
-//    }
-//    std::cout<<std::endl;
-//
-//    auto end_time = std::chrono::high_resolution_clock::now();
-//    std::chrono::duration<double, std::milli> elapsed = end_time - start_time;
-//    std::cout << "initObstacleList  cost==" << elapsed.count() << " ms" << std::endl;
+        tp_server_->getmapPtr()->radiusSearch(Eigen::Vector3d(start->getX(),start->getY(),start->getZ())
+        ,search_horizon,obstacle_list,existDists);
 
 }
+
 
 bool CollisionDetection::getDistanceAndGradientAtPosition(
         const Eigen::Vector3d &point, double *distance,Eigen::Vector3d *gradient) const{
 
     return esdf_server_->getEsdfMapPtr()->
     getDistanceAndGradientAtPosition(point,distance,gradient);
+
+}
+
+bool CollisionDetection::getTargetObstacleGradient(const Eigen::Vector3d &point, Eigen::Vector3d *gradient) const {
+
+
+    *gradient = Eigen::Vector3d::Zero();
+    float d_max=10;
+
+    for (auto obstacle_position : obstacle_list) {
+
+        // 计算障碍物对于输入点的影响
+        double obstacle_distance = (point - obstacle_position).norm();
+
+        if(obstacle_distance>d_max)
+        {
+            continue;
+        }
+
+        // 计算障碍物对梯度的贡献
+        Eigen::Vector3d obstacle_gradient = (point - obstacle_position).normalized();
+        obstacle_gradient *= 2*(obstacle_distance-d_max);
+
+        // 将障碍物的梯度贡献累加到总梯度中
+        *gradient += -obstacle_gradient;
+    }
+    return true;
 }
 
 void CollisionDetection::SetMapPtr(voxblox::EsdfServer *esdf_server) {
     esdf_server_.reset(esdf_server);
-
 }
-
 
 void CollisionDetection::getMapSize() {
 
@@ -73,8 +85,11 @@ VoxelState CollisionDetection::checkVoxelState(Eigen::Vector3d point) {
     double distance = 0.0;
     double c_voxel_distance=collision_distance_;
 
+    //    auto start = std::chrono::high_resolution_clock::now();
+
     for(auto obstacle : obstacle_list)
     {
+
         Eigen::Vector3d diff = point - obstacle;
         double distance = diff.norm();
         if (distance<tp_server_->getCollisionRadius())
@@ -83,6 +98,9 @@ VoxelState CollisionDetection::checkVoxelState(Eigen::Vector3d point) {
         }
     }
 
+//    auto end = std::chrono::high_resolution_clock::now();
+//    std::chrono::duration<double, std::milli> elapsed = end - start;
+//    std::cout <<" o list="<<obstacle_list.size()<< " checkVoxelState  cost==" << elapsed.count() << " ms" << std::endl;
 
     if (esdf_server_->getEsdfMapPtr()->getDistanceAtPosition(point, &distance))
     {
@@ -95,7 +113,6 @@ VoxelState CollisionDetection::checkVoxelState(Eigen::Vector3d point) {
         {
             return VoxelState::free;
         }
-
     }
     else
     {

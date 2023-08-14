@@ -23,50 +23,56 @@ namespace HybridAStar {
 
    It also uses the Voronoi diagram as well as the configuration space.
 */
-class Smoother {
- public:
-  Smoother() {}
+    class Smoother {
+    public:
+        Smoother() {}
 
 
-    /// obstacleCost - pushes the path away from obstacles
-  Eigen::Vector3d obstacleTerm(Eigen::Vector3d xi,const HybridAStar::CollisionDetection *configurationSpace);
+        /// obstacleCost - pushes the path away from obstacles
+        Eigen::Vector3d obstacleTerm(Eigen::Vector3d xi,const HybridAStar::CollisionDetection *configurationSpace);
 
-    /// curvatureCost - forces a maximum curvature of 1/R along the path ensuring drivability
-  Eigen::Vector3d curvatureTerm();
+        Eigen::Vector3d targetobstacleTerm(Eigen::Vector3d xi,const HybridAStar::CollisionDetection *configurationSpace);
 
-    /// smoothnessCost - attempts to spread nodes equidistantly and with the same orientation
-  Eigen::Vector3d smoothnessTerm(Eigen::Vector3d xim3,Eigen::Vector3d xim2, Eigen::Vector3d xim1,
-                                   Eigen::Vector3d xi,
-                                   Eigen::Vector3d xip1, Eigen::Vector3d xip2,Eigen::Vector3d xip3);
+        /// curvatureCost - forces a maximum curvature of 1/R along the path ensuring drivability
+        Eigen::Vector3d curvatureTerm();
 
-  bool smooth(const HybridAStar::CollisionDetection *configurationSpace,double d_t,double v_init ,double v_max, double a_max);
-
-  bool getPolynomialTraj(const mav_msgs::EigenTrajectoryPoint::Vector& waypoints, 
-    mav_trajectory_generation::Trajectory* trajectory, std::vector<double> segment_times) ;
-
-  std::vector<double>  getSegmentTimes(std::vector<Node4D>* path, double v_init , double v_max, double a_max);
-
-  void tracePath(const Node4D* node, int i = 0, std::vector<Node4D> path = std::vector<Node4D>());
-
-  /// returns the path of the smoother object
-  const std::vector<Node4D>& get4DPath() {return fourDpath;}
-
-  void debugPath();
+        /// smoothnessCost - attempts to spread nodes equidistantly and with the same orientation
+        Eigen::Vector3d smoothnessTerm(Eigen::Vector3d xim3,Eigen::Vector3d xim2, Eigen::Vector3d xim1,
+                                       Eigen::Vector3d xi,
+                                       Eigen::Vector3d xip1, Eigen::Vector3d xip2,Eigen::Vector3d xip3);
 
 
 
+        bool smooth(const HybridAStar::CollisionDetection *configurationSpace,double d_t,double v_init ,double v_max, double a_max);
 
- private:
+        bool getPolynomialTraj(const mav_msgs::EigenTrajectoryPoint::Vector& waypoints,
+                               mav_trajectory_generation::Trajectory* trajectory, std::vector<double> segment_times) ;
 
-  std::vector<Node4D> fourDpath;
+        std::vector<double>  getSegmentTimes(std::vector<Node4D>* path, double v_init , double v_max, double a_max);
 
-  float alpha=0.1;
-  float wObstacle = 0.05;
-  float wCurvature = 0.01;
+        void tracePath(const Node4D* node, int i = 0, std::vector<Node4D> path = std::vector<Node4D>());
 
-  float wAccSmooth = 0.0;
-  float wVelSmooth = 0.2;
+        /// returns the path of the smoother object
+        const std::vector<Node4D>& get4DPath() {return fourDpath;}
 
-};
+        void debugPath();
+
+
+
+
+    private:
+
+        std::vector<Node4D> fourDpath;
+
+        float alpha=0.1;
+        float wObstacle = 0.05;
+        float wtargetObstacle = 0.001;
+
+        float wCurvature = 0.01;
+
+        float wAccSmooth = 0.0;
+        float wVelSmooth = 0.2;
+
+    };
 }
 #endif // SMOOTHER_H
