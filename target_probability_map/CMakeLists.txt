@@ -73,8 +73,6 @@ target_link_libraries(target_detection_sim ${catkin_LIBRARIES}
 
 
 
-
-
 cs_add_executable(test
         src/target_probability_map/test.cpp
         )

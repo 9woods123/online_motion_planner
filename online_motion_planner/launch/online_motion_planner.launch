@@ -13,7 +13,10 @@
     <arg name="bound_box_height" default="2" />
     <arg name="collision_distance" default="0.5" />
     <arg name="v_max" default="2" />
-    <arg name="a_max" default="0.25" />
+    <arg name="a_max" default="0.15" />
+    <arg name="dt" default="0.5" />
+
+
     <arg name="step_min" default="2"/>
     <arg name="is_z_axis_considered_goal_check" default="false"/>
 
@@ -85,7 +88,10 @@
         <param name="collision_distance" value="$(arg collision_distance)" />
         <param name="v_max" value="$(arg v_max)" />
         <param name="a_max" value="$(arg a_max)" />
+        <param name="dt" value="$(arg dt)" />
         <param name="step_min" value="$(arg step_min)" />
+
+
 
 
         <remap from="robot_pose_topic" to="/$(arg robot_name)/ground_truth_to_tf_eca_a9/pose"/>
@@ -101,12 +107,11 @@
 
 
 
-    <arg name="target_collison_raduis" default="4"/>
+<!--    <arg name="target_collison_raduis" default="4"/>-->
 
-
-    <include file="$(find target_probability_map)/launch/target_detection_sim.launch">
-        <arg name="target_sphere_radius" value="$(arg target_collison_raduis)" />
-    </include>
+<!--    <include file="$(find target_probability_map)/launch/target_detection_sim.launch">-->
+<!--        <arg name="target_sphere_radius" value="$(arg target_collison_raduis)" />-->
+<!--    </include>-->
 
 <!--    <include file="$(find target_probability_map)/launch/tp_map_server_node.launch">-->
 <!--        <arg name="collision_radius" value="$(arg target_collison_raduis)" />-->

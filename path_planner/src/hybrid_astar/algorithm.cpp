@@ -28,8 +28,7 @@ bool Algorithm::GotGoal(Node4D& current, const Node4D& goal){
 //    std::cout<<"current=="<<current.getX()<<", "<<current.getY()<<", "<<current.getZ()<<", "<<current.getT()/M_PI<<" pi"<<std::endl;
 //    std::cout<<"current. G=="<<current.getG()<<"    current. H=="<<current.getH();
 //    std::cout<<"    e_dis=="<<e_dis<<"  yaw_dis=="<<yaw_dis/M_PI<<" pi "<<std::endl;
-
-    // debug goal 1.99 pi, curr 0.05 pi, the yaw dis=1.94pi , however, we exc
+// debug goal 1.99 pi, curr 0.05 pi, the yaw dis=1.94pi , however, we exc
     if(e_dis>4*planning_step/planning_resolution||yaw_dis>0.25*M_PI)
     {
         return false;
@@ -145,9 +144,6 @@ Node4D* Algorithm::hybridAStar(Node4D& start,
   Open.push(&start);
   extend_nodes.emplace(NodeToIndex(start), &start);
 
-  // extend_nodes.insert(std::make_pair<Eigen::Vector3i, Node4D>(NodeToIndex(starta), starta));
-  // std::unordered_map< Eigen::Vector3i , Node4D>    extend_nodes;
-
   // NODE POINTER
   Node4D* nPred;
   Node4D* nSucc;
@@ -193,7 +189,6 @@ Node4D* Algorithm::hybridAStar(Node4D& start,
       bool reach_horizon = nPred->getG()>=search_horizon;
 
       if (*nPred == goal || GotGoal (*nPred,goal)|| iterations > Constants::iterations||reach_horizon) {
-
           return nPred;
       }
       else {    // ____________________
@@ -208,13 +203,10 @@ Node4D* Algorithm::hybridAStar(Node4D& start,
 //            return nSucc;
 //          }
 //        }
-        //std::cout<<"===SEARCH WITH SIMULATION=="<<std::endl;
 
         // ===============================================================================================
         // SEARCH WITH SIMULATION
-        int succ_Traversable=0;
         for (int i = 0; i < dir; i++) {
-          //std::cout<<"===NEW Dir=="<<std::endl;
 
           // create possible successor
           nSucc = nPred->createSuccessor(i);  //in the createSuccessor(), nSucc->pred are set to be nPred.
@@ -223,7 +215,6 @@ Node4D* Algorithm::hybridAStar(Node4D& start,
 
           // ensure successor is on grid and traversable
           if (configurationSpace.isTraversable(nSucc)) {
-              succ_Traversable++;
             // ensure successor is not on closed list or it has the same index as the predecessor
 
             if (    (extend_nodes.find(iSucc)==extend_nodes.end())  // TRUE: the node is not found in extend nodes
@@ -235,13 +226,12 @@ Node4D* Algorithm::hybridAStar(Node4D& start,
 
               nSucc->updateG();// calculate new G value
               newG = nSucc->getG();
-              //std::cout<<"newG======"<<newG<<std::endl;
               // if successor not on open list or found a shorter way to the cell
               if (! extend_nodes.find(iSucc)->second->isOpen()
                  || newG < extend_nodes.find(iSucc)->second->getG()
                  || iPred == iSucc)
               {
-// calculate H value
+                  // calculate H value
                 updateH(*nSucc, goal,configurationSpace,visualization);
 
                 // if the successor is in the same cell but the C value is larger

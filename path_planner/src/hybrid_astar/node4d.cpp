@@ -29,15 +29,10 @@ void Node4D::setMotionPrims() {
     float dt_array[]  = { 0,              -delta_t,   delta_t,  0,          0               };
 
 
-
     copy_array(dx,dx_array,dir);
-
     copy_array(dy,dy_array,dir);
-
     copy_array(dz,dz_array,dir);
-
     copy_array(dt,dt_array,dir);
-
 
 
 }

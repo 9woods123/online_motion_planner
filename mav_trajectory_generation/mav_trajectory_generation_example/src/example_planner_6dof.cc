@@ -173,6 +173,7 @@ vertices.push_back(end);
 
   // get trajectory as polynomial parameters
   opt.getTrajectory(&(*trajectory));
+  
   trajectory->scaleSegmentTimesToMeetConstraints(v_max, a_max);
   
   return true;

@@ -31,7 +31,8 @@ find_package(catkin REQUIRED COMPONENTS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/hybrid_astar/path.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/hybrid_astar/smoother.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/hybrid_astar/visualize.cpp
-        #Boris Lau, Christoph Sprunk, Wolfram Burgard
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/hybrid_astar/feasibleOpt.cpp
+
     )
 
 set(HEADERS
@@ -45,9 +46,8 @@ set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/visualize.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/helper.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/constants.h
-        #Andrew Noske
-        #Boris Lau, Christoph Sprunk, Wolfram Burgard
-        #Boris Lau, Christoph Sprunk, Wolfram Burgard
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/feasibleOpt.h
+
     )
 
 

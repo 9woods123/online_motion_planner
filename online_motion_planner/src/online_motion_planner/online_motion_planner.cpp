@@ -9,13 +9,8 @@ online_motion_planner::online_motion_planner(const ros::NodeHandle &nh,
                           : nh_(nh), nh_private_(nh_private), rate_(10.0) {
 
     initPlanner();
+
     configurationSpace.initConfiguration(nh_, nh_private_,0.1,0.25,0.85);
-//    esdf_server_.reset(new voxblox::EsdfServer(nh_, nh_private_));   // begin an esdf ros process
-//    esdf_server_->setTraversabilityRadius(0.2);
-//    configurationSpace.SetMapPtr(esdf_server_.get());
-
-
-
 
     traj_pub=nh_.advertise<uuv_control_msgs::Trajectory>(robot_name_+"/input_trajectory", 1, true);
     holdOnClient=nh_private_.serviceClient<uuv_control_msgs::Hold>(robot_name_+"/hold_vehicle");
@@ -65,7 +60,6 @@ void online_motion_planner::initPlanner() {
     configurationSpace.setBoundBox(bound_box_length_,bound_box_width_,bound_box_height_);
     configurationSpace.setCollisionDistance(collision_distance_);
 
-
     GoalRecevied=false;
     planning_state_=PlanningState::UNINIT;
 
@@ -86,12 +80,13 @@ void online_motion_planner::refCallback(const visualization_msgs::MarkerConstPtr
     ctrl_ref=*msg;
     ctrl_ref_pose.pose.position=ctrl_ref.pose.position;
     ctrl_ref_pose.pose.orientation=ctrl_ref.pose.orientation;
+
 }
 
 void online_motion_planner::pub_planned_traj(std::vector<HybridAStar::Node4D> path_nodes,ros::Time traj_start_time) {
 
-//=========  publish planned trajectory to auv controller  ===========
-//  v=0.7/d
+ //=========  publish planned trajectory to auv controller  ===========
+ //  v=0.7/d
 
  //   ros::Time d(step_min_/v_max_);   
     ros::Time d(dt_);   
@@ -120,6 +115,39 @@ void online_motion_planner::pub_planned_traj(std::vector<HybridAStar::Node4D> pa
     traj_pub.publish(planned_traj);
 
 }
+
+double online_motion_planner::getVelFromTime(ros::Time current_time) {
+
+    double vel;
+
+    if(current_time.toNSec()< planned_traj.points[0].header.stamp.toNSec())
+    {
+        vel=0;
+        return vel;
+    }
+    else if(current_time.toNSec()>planned_traj.points.back().header.stamp.toNSec())
+    {
+        vel=0;
+        return vel;
+    }
+
+
+    for (int i =1;i<planned_traj.points.size();i++)
+    {
+        if (current_time.toNSec()<=planned_traj.points[i].header.stamp.toNSec())
+        {
+            double dist=std::sqrt(
+            SQ(planned_traj.points[i].pose.position.x-planned_traj.points[i-1].pose.position.x)
+           +SQ(planned_traj.points[i].pose.position.y-planned_traj.points[i-1].pose.position.y)
+           +SQ(planned_traj.points[i].pose.position.z-planned_traj.points[i-1].pose.position.z));
+
+            vel=dist/dt_;
+            return vel;
+        }
+    }
+
+}
+
 
 geometry_msgs::PoseStamped online_motion_planner::getTrajPointFromTime(ros::Time current_time) {
 
@@ -197,6 +225,7 @@ bool online_motion_planner::ReachGoal() {
 
 }
 
+
 bool online_motion_planner::trajReplanHorizon() {
 
     double distance_start=
@@ -232,6 +261,7 @@ bool online_motion_planner::trajReplanHorizon() {
 
 bool online_motion_planner::trajCollisionDetection() {
 
+    configurationSpace.initObstacleList(&smoother.get4DPath()[0],planning_horizon_);
 
     for (auto it = smoother.get4DPath().rbegin(); it != smoother.get4DPath().rend(); ++it) {
 
@@ -301,6 +331,7 @@ void online_motion_planner::planning_loop(const ros::TimerEvent &event) {
 
             HybridAStar::Node4D* nSolution = hybridAstarPlanner.hybridAStar
                     (Start, Goal, configurationSpace, visualization);
+
             double cost=ros::Time::now().toSec() - traj_start_time.toSec();
             ROS_INFO_STREAM("\033[1;32m HybridAStar calculation cost "<<cost<<"s \033[0m");
 
@@ -309,6 +340,7 @@ void online_motion_planner::planning_loop(const ros::TimerEvent &event) {
             smoother.tracePath(nSolution);
             smoother.smooth(&configurationSpace, dt_ ,0 , v_max_,  a_max_);
             smoothedPath.updatePath(smoother.get4DPath());
+
             if(smoother.get4DPath().size()>1)
             {
                 planning_state_=PlanningState::EXECUTE;
@@ -328,6 +360,8 @@ void online_motion_planner::planning_loop(const ros::TimerEvent &event) {
             ROS_INFO_STREAM("\033[1;32m REPLAN         \033[0m");
 
             traj_start_time=ros::Time::now();
+            double curr_target_vel=getVelFromTime(traj_start_time);
+
             setStart(getTrajPointFromTime(traj_start_time));
             setGoal(new_goal_pose);
 
@@ -344,8 +378,9 @@ void online_motion_planner::planning_loop(const ros::TimerEvent &event) {
             ROS_INFO_STREAM("\033[1;32m hybridAStar calculation cost "<<cost<<"s \033[0m");
 
             //TODO   v_init  should be   v_current_ref, we use v_max_ to test  raw codes.
+
             smoother.tracePath(nSolution);
-            smoother.smooth(&configurationSpace, dt_ ,v_max_ , v_max_,  a_max_);
+            smoother.smooth(&configurationSpace, dt_ ,curr_target_vel , v_max_,  a_max_);
             smoothedPath.updatePath(smoother.get4DPath());
 
             if(smoother.get4DPath().size()>1)
@@ -364,7 +399,7 @@ void online_motion_planner::planning_loop(const ros::TimerEvent &event) {
 
         case PlanningState::EXECUTE:
         {
-
+            
             if (ReachGoal())
             {
                 planning_state_=PlanningState::GETGOAL;

@@ -41,7 +41,27 @@ namespace HybridAStar {
                                        Eigen::Vector3d xi,
                                        Eigen::Vector3d xip1, Eigen::Vector3d xip2,Eigen::Vector3d xip3);
 
+        float FeasibleTerm(Eigen::Vector3d xim2, Eigen::Vector3d xim1,
+                                       Eigen::Vector3d xi,
+                                       Eigen::Vector3d xip1, Eigen::Vector3d xip2,
+                                       float t_im2,float t_im1,
+                                       float t_i,
+                                       float t_ip1,float t_ip2
+                                       );
 
+        std::vector<double> adjustPathTime(std::vector<Node4D> &path, double v_init , double v_max, double a_max);
+        void printPathInfo(const std::vector<Node4D>& path, const std::vector<double>& new_times);
+
+        float getVelPenaltyGradient(double deltaXK, double deltaXKim1,
+                                    double tK, double tKp1, double tKim1, float v_max);
+
+        float getAccPenaltyGradient(double delta_v_k,double delta_v_kim1,double t_k,
+                                    double t_kp1,double t_kim1,double a_max);
+
+        float getAccSmoothGradient(double delta_v_k,double delta_v_kim1,double t_k,
+                                    double t_kp1,double t_kim1,double a_max);
+
+        float getTimeBarrierGradient(double tK, double tKp1, double tKim1);
 
         bool smooth(const HybridAStar::CollisionDetection *configurationSpace,double d_t,double v_init ,double v_max, double a_max);
 
@@ -57,7 +77,7 @@ namespace HybridAStar {
 
         void debugPath();
 
-
+        inline float getDistance(Eigen::Vector3d from,Eigen::Vector3d to);
 
 
     private:
@@ -66,12 +86,12 @@ namespace HybridAStar {
 
         float alpha=0.1;
         float wObstacle = 0.05;
-        float wtargetObstacle = 0.001;
+        float wtargetObstacle = 0.00;
 
         float wCurvature = 0.01;
 
         float wAccSmooth = 0.0;
-        float wVelSmooth = 0.2;
+        float wVelSmooth = 0.5;
 
     };
 }

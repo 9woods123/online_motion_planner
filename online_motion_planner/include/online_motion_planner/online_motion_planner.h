@@ -109,9 +109,8 @@ private:
     float a_max_;
     float dt_;
 
-public:
+//===================================private function===================================
 
-    online_motion_planner(const ros::NodeHandle& nh, const ros::NodeHandle& nh_private);
     void initPlanner();
     void poseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg);
     void goalCallback(const geometry_msgs::PoseStamped::ConstPtr& msg);
@@ -125,6 +124,10 @@ public:
     void pub_planned_traj(std::vector<HybridAStar::Node4D> path_nodes,ros::Time traj_start_time);
     void holdOn();
     geometry_msgs::PoseStamped getTrajPointFromTime(ros::Time current_time);
+    double getVelFromTime(ros::Time current_time);
+
+public:
+    online_motion_planner(const ros::NodeHandle& nh, const ros::NodeHandle& nh_private);
 
 };
 
