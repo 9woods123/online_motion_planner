@@ -1,0 +1,35 @@
+<launch>
+    <!-- launch the motion planner-->
+
+    <arg name="robot_name" default="eca_a9"/>
+    <arg name="tiling_resolution" default="35"/>
+    <arg name="bound_box_x_min" default="-100"/>
+    <arg name="bound_box_x_max" default="100"/>
+    <arg name="bound_box_y_min" default="-100"/>
+    <arg name="bound_box_y_max" default="100"/>
+    <arg name="bound_box_z_min" default="-100"/>
+    <arg name="bound_box_z_max" default="0"/>
+
+    <arg name="robot_pose_topic" default="/$(arg robot_name)/ground_truth_to_tf_eca_a9/pose"/>
+    <arg name="goal_topic" default="/goal"/>
+
+
+    <node name="online_coverage_planner_node" pkg="online_coverage_planner" type="online_coverage_planner_node" output="screen">
+
+        <param name="tiling_resolution" value="$(arg tiling_resolution)" />
+        <param name="bound_box_x_min" value="$(arg bound_box_x_min)" />
+        <param name="bound_box_x_max" value="$(arg bound_box_x_max)" />
+        <param name="bound_box_y_min" value="$(arg bound_box_y_min)" />
+        <param name="bound_box_y_max" value="$(arg bound_box_y_max)" />
+        <param name="bound_box_z_min" value="$(arg bound_box_z_min)" />
+        <param name="bound_box_z_max" value="$(arg bound_box_z_max)" />
+
+        <remap from="robot_pose_topic" to="$(arg robot_pose_topic)"/>
+        <remap from="planned_goal_topic" to="$(arg goal_topic)"/>
+
+    </node>
+
+
+    <include file="$(find online_motion_planner)/launch/online_motion_planner.launch"/>
+
+</launch>

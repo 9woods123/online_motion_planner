@@ -59,7 +59,6 @@
     </node>
 
 
-    <arg name="planner_config" default="planners/woods_maze_planner.yaml"/>
     <node name="online_motion_planner_node" pkg="online_motion_planner" type="online_motion_planner_node" output="screen">
         <remap from="online_motion_planner_node/esdf_map_in" to="voxblox_node/esdf_map_out" />
         <remap from="online_motion_planner_node/tsdf_map_in" to="voxblox_node/tsdf_map_out" />
@@ -92,32 +91,14 @@
         <param name="step_min" value="$(arg step_min)" />
 
 
-
-
         <remap from="robot_pose_topic" to="/$(arg robot_name)/ground_truth_to_tf_eca_a9/pose"/>
         <remap from="detect_info_topic" to="/detect_info"/>
         <param name="collision_radius" value="$(arg collision_radius)" />
-
 
     </node>
 
     <include file="$(find online_motion_planner)/launch/eca9_a9_upload.launch">
     </include>
 
-
-
-
-<!--    <arg name="target_collison_raduis" default="4"/>-->
-
-<!--    <include file="$(find target_probability_map)/launch/target_detection_sim.launch">-->
-<!--        <arg name="target_sphere_radius" value="$(arg target_collison_raduis)" />-->
-<!--    </include>-->
-
-<!--    <include file="$(find target_probability_map)/launch/tp_map_server_node.launch">-->
-<!--        <arg name="collision_radius" value="$(arg target_collison_raduis)" />-->
-<!--    </include>-->
-
-
-    <!--    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find online_motion_planner)/rviz/online_motion_planner_vis.rviz" />-->
 
 </launch>
