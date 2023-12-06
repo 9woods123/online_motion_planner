@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: online_coverage_planner
+Description: Description of online_coverage_planner
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -ltiling_map -lonline_coverage_planner
+Requires: catkin_simple detect_msgs geometry_msgs octomap_msgs roscpp rospy sensor_msgs std_msgs tf visualization_msgs

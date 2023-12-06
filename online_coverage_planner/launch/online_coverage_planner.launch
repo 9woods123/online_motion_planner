@@ -2,13 +2,21 @@
     <!-- launch the motion planner-->
 
     <arg name="robot_name" default="eca_a9"/>
-    <arg name="tiling_resolution" default="35"/>
+    <arg name="tiling_resolution" default="5"/>
+    <arg name="bound_box_x_min" default="-10"/>
+    <arg name="bound_box_x_max" default="10"/>
+    <arg name="bound_box_y_min" default="-10"/>
+    <arg name="bound_box_y_max" default="10"/>
+    <arg name="bound_box_z_min" default="-10"/>
+    <arg name="bound_box_z_max" default="0"/>
+
+    <!-- <arg name="tiling_resolution" default="35"/>
     <arg name="bound_box_x_min" default="-100"/>
     <arg name="bound_box_x_max" default="100"/>
     <arg name="bound_box_y_min" default="-100"/>
     <arg name="bound_box_y_max" default="100"/>
     <arg name="bound_box_z_min" default="-100"/>
-    <arg name="bound_box_z_max" default="0"/>
+    <arg name="bound_box_z_max" default="0"/> -->
 
     <arg name="robot_pose_topic" default="/$(arg robot_name)/ground_truth_to_tf_eca_a9/pose"/>
     <arg name="goal_topic" default="/goal"/>
@@ -30,6 +38,6 @@
     </node>
 
 
-    <include file="$(find online_motion_planner)/launch/online_motion_planner.launch"/>
+    <!-- <include file="$(find online_motion_planner)/launch/online_motion_planner.launch"/> -->
 
 </launch>

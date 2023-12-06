@@ -26,7 +26,7 @@ private:
     ros::Timer planner_timer;
     ros::Rate rate_;
 
-    std::shared_ptr<tiling_map> tiling_map_ptr;
+    std::shared_ptr<TilingMap::tiling_map> tiling_map_ptr;
     
 //  local msgs and datas
     geometry_msgs::PoseStamped current_pose;

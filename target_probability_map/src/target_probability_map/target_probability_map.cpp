@@ -12,7 +12,6 @@ namespace tp_map {
             occur_threshold(occur_threshold),
             free_threshold(free_threshold),
             octree(0.1f)
-
     {
 
         map_.clear();
@@ -42,6 +41,7 @@ namespace tp_map {
     void target_probability_map::setCollisionRadius(float collision_radius_) {
     collision_radius=collision_radius_;
     }
+
     target_probability_map::OctreeType* target_probability_map::getOctree() {
         return &octree;
     }

@@ -8,7 +8,7 @@
 online_coverage_planner::online_coverage_planner(const ros::NodeHandle& nh,
                                                  const ros::NodeHandle& nh_private)
 
-    : nh_(nh), nh_private_(nh_private), rate_(10.0) {
+    : nh_(nh), nh_private_(nh_private), rate_(1.0) {
 
     initParams();
 
@@ -21,7 +21,7 @@ online_coverage_planner::online_coverage_planner(const ros::NodeHandle& nh,
                                          &online_coverage_planner::planning_loop,this);
     
 
-    tiling_map_ptr=std::make_shared<tiling_map>(
+    tiling_map_ptr=std::make_shared<TilingMap::tiling_map>(
         online_coverage_planner::tiling_resolution,
         online_coverage_planner::bound_box_x_min,
         online_coverage_planner::bound_box_x_max,
@@ -51,13 +51,52 @@ void online_coverage_planner::poseCallback(const geometry_msgs::PoseStamped::Con
 
 bool online_coverage_planner::decideNextAreaToExplore(){
 
-    // TODO ,input: tiling_map, 
+
+    // std::shared_ptr<TilingMap::TilingMapHashmap> tilingMapHashmap=tiling_map_ptr->getTilingMapHashmap();
+    std::shared_ptr<TilingMap::TilingMapHashmap> tilingMapHashmap=
+    std::make_shared<TilingMap::TilingMapHashmap>(*tiling_map_ptr->getTilingMapHashmap());
+
+    // 遍历hashmap，找到价值最高的栅格
+    // std::cout <<"tilingMapHashmap size= "<< tilingMapHashmap->size()<<std::endl;
+
+    Eigen::Vector3d robot_pose(current_pose.pose.position.x,
+                                                            current_pose.pose.position.y,
+                                                            current_pose.pose.position.z);
+
+    TilingMap::tilingGrid grid_max_p;
+    float max_value=-999;
+    
+    Eigen::Vector3i robot_index =tiling_map_ptr->PointToIndex(robot_pose);
+
+    for (const auto& entry : *tilingMapHashmap) {
+            
+            if(robot_index==entry.first){continue;}
+
+            float value=entry.second.potential/(robot_index-entry.first).norm();
+
+            if( value >max_value){
+                grid_max_p=entry.second;
+            }
+
+    }
+    std::cout<<"robot_index"<<robot_index.x()<<", "<<robot_index.y()<<std::endl;
+    std::cout<<grid_max_p.index_x<<", "<<grid_max_p.index_y<<" p="<<grid_max_p.potential<<std::endl;
 
 }
 
-void online_coverage_planner::planning_loop(const ros::TimerEvent &event) {
-    
 
+void online_coverage_planner::planning_loop(const ros::TimerEvent &event) {
+
+
+// TODO 更新地图，此处后续应该改为更具传感器数据更新地图，这里用robotPose是因为
+// 没想好传感器的具体形式，只能假设随着机器人移动，传感器数据是覆盖机器人pose周围的一种扫描。
+
+// Eigen::Vector3d robot_pose(current_pose.pose.position.x,
+//                                                             current_pose.pose.position.y,
+//                                                             current_pose.pose.position.z);
+// tiling_map_ptr->updateMapbyRobotPose(robot_pose);
+
+decideNextAreaToExplore();
 
 }
 
