@@ -93,6 +93,7 @@ Eigen::Vector3i tiling_map::PointToIndex(Eigen::Vector3d point)
 
         Eigen::Vector3i index = ((point - map_origin_) / resolution).array().floor().cast<int>();
         index.z()=0;
+        
         return index;
 }
 

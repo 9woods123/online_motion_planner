@@ -72,15 +72,17 @@ bool online_coverage_planner::decideNextAreaToExplore(){
             
             if(robot_index==entry.first){continue;}
 
-            float value=entry.second.potential/(robot_index-entry.first).norm();
-
+            float distance=abs(robot_index.x()-entry.first.x())+abs(robot_index.y()-entry.first.y());            // city distance
+            float value=entry.second.potential/distance;
+            
             if( value >max_value){
+                max_value=value;
                 grid_max_p=entry.second;
             }
 
     }
-    std::cout<<"robot_index"<<robot_index.x()<<", "<<robot_index.y()<<std::endl;
-    std::cout<<grid_max_p.index_x<<", "<<grid_max_p.index_y<<" p="<<grid_max_p.potential<<std::endl;
+
+    // std::cout<<grid_max_p.index_x<<", "<<grid_max_p.index_y<<" p="<<grid_max_p.potential<<std::endl;
 
 }
 
