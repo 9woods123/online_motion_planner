@@ -67,6 +67,20 @@ online_coverage_planner )
 add_dependencies(online_coverage_planner_node
  online_coverage_planner)
 
+
+cs_add_executable(visualization_node 
+${CMAKE_CURRENT_SOURCE_DIR}/src/visualization.cpp
+)
+add_dependencies(visualization_node
+ tiling_map)
+target_link_libraries(visualization_node
+        ${EIGEN3_LIBRARIES}
+        tiling_map
+        )
+
+
+
+
 cs_install()
 cs_export()
 

@@ -106,4 +106,9 @@ Eigen::Vector3d tiling_map::getGridCenter(Eigen::Vector3i index){
 
 }
 
+float tiling_map::getResolution(){
+                return resolution;
+            }
+
+
 }

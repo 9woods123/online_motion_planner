@@ -80,7 +80,7 @@ namespace TilingMap{
             TilingMapHashmap* getTilingMapHashmap();
             Eigen::Vector3d getGridCenter(Eigen::Vector3i index);
             Eigen::Vector3i PointToIndex(Eigen::Vector3d point);
-
+            float getResolution();
 
         private:
             float resolution;

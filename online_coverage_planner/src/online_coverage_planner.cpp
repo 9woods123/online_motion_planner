@@ -74,7 +74,7 @@ bool online_coverage_planner::decideNextAreaToExplore(){
 
             float distance=abs(robot_index.x()-entry.first.x())+abs(robot_index.y()-entry.first.y());            // city distance
             float value=entry.second.potential/distance;
-            
+
             if( value >max_value){
                 max_value=value;
                 grid_max_p=entry.second;
@@ -93,10 +93,10 @@ void online_coverage_planner::planning_loop(const ros::TimerEvent &event) {
 // TODO 更新地图，此处后续应该改为更具传感器数据更新地图，这里用robotPose是因为
 // 没想好传感器的具体形式，只能假设随着机器人移动，传感器数据是覆盖机器人pose周围的一种扫描。
 
-// Eigen::Vector3d robot_pose(current_pose.pose.position.x,
-//                                                             current_pose.pose.position.y,
-//                                                             current_pose.pose.position.z);
-// tiling_map_ptr->updateMapbyRobotPose(robot_pose);
+Eigen::Vector3d robot_pose(current_pose.pose.position.x,
+                                                            current_pose.pose.position.y,
+                                                            current_pose.pose.position.z);
+tiling_map_ptr->updateMapbyRobotPose(robot_pose);
 
 decideNextAreaToExplore();
 
