@@ -8,6 +8,8 @@
 #include <ros/ros.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <online_coverage_planner/tiling_map.h>
+#include <online_coverage_planner/tiling_map.h>
+#include<visualization/visualization.h>
 
 
 class online_coverage_planner{
@@ -27,10 +29,12 @@ private:
     ros::Rate rate_;
 
     std::shared_ptr<TilingMap::tiling_map> tiling_map_ptr;
-    
+    visualization visualization_node;
+
+
 //  local msgs and datas
     geometry_msgs::PoseStamped current_pose;
-
+    Eigen::Vector3d robot_position;
 
 //  local msgs and datas
 
@@ -51,7 +55,7 @@ private:
     void goalCallback(const geometry_msgs::PoseStamped::ConstPtr& msg);
     void poseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg);
     void planning_loop(const ros::TimerEvent& event);
-    bool decideNextAreaToExplore();
+    TilingMap::tilingGrid decideNextAreaToExplore();
     void initParams();
 
 public:

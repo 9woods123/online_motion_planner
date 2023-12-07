@@ -8,9 +8,11 @@
 online_coverage_planner::online_coverage_planner(const ros::NodeHandle& nh,
                                                  const ros::NodeHandle& nh_private)
 
-    : nh_(nh), nh_private_(nh_private), rate_(1.0) {
+    : nh_(nh), nh_private_(nh_private), rate_(1.0), visualization_node(nh, nh_private)
+{
 
     initParams();
+
 
     robot_pose_sub=nh_.subscribe("robot_pose_topic",10, &online_coverage_planner::poseCallback,this);
 
@@ -27,6 +29,9 @@ online_coverage_planner::online_coverage_planner(const ros::NodeHandle& nh,
         online_coverage_planner::bound_box_x_max,
         online_coverage_planner::bound_box_y_min,
         online_coverage_planner::bound_box_y_max);
+        
+    visualization_node.setTilingMap2vis(*tiling_map_ptr);
+
 
 }
 
@@ -49,12 +54,12 @@ void online_coverage_planner::poseCallback(const geometry_msgs::PoseStamped::Con
     current_pose = *msg;
 }
 
-bool online_coverage_planner::decideNextAreaToExplore(){
+TilingMap::tilingGrid online_coverage_planner::decideNextAreaToExplore(){
 
 
-    // std::shared_ptr<TilingMap::TilingMapHashmap> tilingMapHashmap=tiling_map_ptr->getTilingMapHashmap();
-    std::shared_ptr<TilingMap::TilingMapHashmap> tilingMapHashmap=
-    std::make_shared<TilingMap::TilingMapHashmap>(*tiling_map_ptr->getTilingMapHashmap());
+
+    const auto tilingMapHashmap=tiling_map_ptr->getTilingMapHashmap();
+
 
     // 遍历hashmap，找到价值最高的栅格
     // std::cout <<"tilingMapHashmap size= "<< tilingMapHashmap->size()<<std::endl;
@@ -82,7 +87,15 @@ bool online_coverage_planner::decideNextAreaToExplore(){
 
     }
 
-    // std::cout<<grid_max_p.index_x<<", "<<grid_max_p.index_y<<" p="<<grid_max_p.potential<<std::endl;
+    // std::cout<<"=========================debug============================="<<std::endl;
+
+    // for (const auto& tiling_grid : *tilingMapHashmap) {
+    //         std::cout<<"debug"<<"tiling grid index= "<<tiling_grid.second.index_x<<", "<<tiling_grid.second.index_y
+    //         <<"    potential=="<< tiling_grid.second.potential<<std::endl;
+    // }
+        std::cout<<grid_max_p.index_x<<", "<<grid_max_p.index_y<<" p="<<grid_max_p.potential<<std::endl;
+
+return grid_max_p;
 
 }
 
@@ -96,9 +109,18 @@ void online_coverage_planner::planning_loop(const ros::TimerEvent &event) {
 Eigen::Vector3d robot_pose(current_pose.pose.position.x,
                                                             current_pose.pose.position.y,
                                                             current_pose.pose.position.z);
+
 tiling_map_ptr->updateMapbyRobotPose(robot_pose);
 
-decideNextAreaToExplore();
+
+
+TilingMap::tilingGrid nextBextGrid=decideNextAreaToExplore();
+
+std::cout<<"==========decideNextAreaToExplore=========="<<std::endl;
+
+
+
+visualization_node.drawMapinRviz(nextBextGrid);
 
 }
 

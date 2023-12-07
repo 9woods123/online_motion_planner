@@ -38,6 +38,6 @@
     </node>
 
 
-    <!-- <include file="$(find online_motion_planner)/launch/online_motion_planner.launch"/> -->
+<node type="rviz" name="rviz" pkg="rviz" args="-d $(find online_coverage_planner)/rviz/online_coverage_planner.rviz" />
 
 </launch>

@@ -56,10 +56,10 @@ bool tiling_map::genTilingGrid(){
         }
     }
 
-    for (const auto& tiling_grid : tiling_map_hashmap) {
-            std::cout<<"debug"<<"tiling grid index= "<<tiling_grid.second.index_x<<", "<<tiling_grid.second.index_y
-            <<"    potential=="<< tiling_grid.second.potential<<std::endl;
-    }
+//     for (const auto& tiling_grid : tiling_map_hashmap) {
+//             std::cout<<"debug"<<"tiling grid index= "<<tiling_grid.second.index_x<<", "<<tiling_grid.second.index_y
+//             <<"    potential=="<< tiling_grid.second.potential<<std::endl;
+//     }
 
 }
 
@@ -78,17 +78,18 @@ if (distance<checkFreeRadius){
 
 tiling_map_hashmap[index].grid_state=gridState::FREE;
 tiling_map_hashmap[index].potential=0;
-}
 
 }
 
-
-TilingMapHashmap* tiling_map::getTilingMapHashmap(){
-return &tiling_map_hashmap;    
 }
 
 
-Eigen::Vector3i tiling_map::PointToIndex(Eigen::Vector3d point)
+const TilingMapHashmap* tiling_map::getTilingMapHashmap()const{
+return  &tiling_map_hashmap;    
+}
+
+
+Eigen::Vector3i tiling_map::PointToIndex(Eigen::Vector3d point)const
 {
 
         Eigen::Vector3i index = ((point - map_origin_) / resolution).array().floor().cast<int>();
@@ -98,15 +99,17 @@ Eigen::Vector3i tiling_map::PointToIndex(Eigen::Vector3d point)
 }
 
 
-Eigen::Vector3d tiling_map::getGridCenter(Eigen::Vector3i index){
+Eigen::Vector3d tiling_map::getGridCenter(Eigen::Vector3i index)const{
 
         Eigen::Vector3d center = map_origin_ +
                 (index.cast<double>() + Eigen::Vector3d(0.5,0.5,0.5)) * resolution;
+
+        center.z()=0;
         return center;
 
 }
 
-float tiling_map::getResolution(){
+float tiling_map::getResolution()const{
                 return resolution;
             }
 

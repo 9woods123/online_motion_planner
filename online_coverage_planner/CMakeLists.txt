@@ -42,18 +42,31 @@ target_link_libraries(tiling_map
         ${EIGEN3_LIBRARIES}
         )
 
+
+cs_add_library(visualization
+${CMAKE_CURRENT_SOURCE_DIR}/src/visualization.cpp
+)
+add_dependencies(visualization
+        tiling_map)
+target_link_libraries(visualization
+        ${EIGEN3_LIBRARIES}
+        tiling_map
+        )
+
+
 ## add libarary  online_coverage_planner
 cs_add_library(online_coverage_planner 
 ${CMAKE_CURRENT_SOURCE_DIR}/src/online_coverage_planner.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/include/online_coverage_planner/online_coverage_planner.h
 )
-add_dependencies(online_coverage_planner tiling_map)
+add_dependencies(online_coverage_planner tiling_map visualization)
 ## online_coverage_planner using lib tiling_map
 target_link_libraries(online_coverage_planner
         ${catkin_LIBRARIES}
         ${EIGEN3_LIBRARIES}
         ${PCL_LIBRARIES}
         tiling_map
+        visualization
         )
 
 

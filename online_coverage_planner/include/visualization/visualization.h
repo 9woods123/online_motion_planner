@@ -14,14 +14,15 @@ class visualization{
 
             ros::Publisher marker_pub_;
 
-             visualization_msgs::MarkerArray marker_array;
-            std::shared_ptr<TilingMap::tiling_map> tiling_map_ptr;
-
+            visualization_msgs::MarkerArray marker_array;
+            std::shared_ptr<const TilingMap::tiling_map> tiling_map_ptr;
+            
 
     public:
             visualization(const ros::NodeHandle& nh, const ros::NodeHandle& nh_private);
-            void setTilingMap2vis(const TilingMap::tiling_map& tiling_map_);
+            void setTilingMap2vis( TilingMap::tiling_map& tiling_map_);
             void drawMapinRviz();
+            void drawMapinRviz(const TilingMap::tilingGrid& next_bext_grid);
             void pubMap();
 
 };
