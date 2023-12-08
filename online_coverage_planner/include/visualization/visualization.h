@@ -11,7 +11,7 @@ class visualization{
     private:
             ros::NodeHandle nh_;
             ros::NodeHandle nh_private_;
-
+            std::string world_frame_;
             ros::Publisher marker_pub_;
 
             visualization_msgs::MarkerArray marker_array;

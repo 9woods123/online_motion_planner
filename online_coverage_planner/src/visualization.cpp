@@ -7,6 +7,8 @@ visualization::visualization(const ros::NodeHandle& nh, const ros::NodeHandle& n
     // 创建一个用于发布 Marker 的发布者
     marker_pub_ = nh_.advertise<visualization_msgs::MarkerArray>("tiling_map_markers", 10);
 
+    world_frame_="world";
+
 }
 
 void visualization::setTilingMap2vis( TilingMap::tiling_map& tiling_map_){
@@ -20,8 +22,9 @@ tiling_map_ptr.reset(&tiling_map_);
 
 
 void visualization::drawMapinRviz(const TilingMap::tilingGrid& next_bext_grid){
-
+    
 marker_array.markers.clear();
+
 
 
 const auto tilingMapHashmap=tiling_map_ptr->getTilingMapHashmap();
@@ -44,7 +47,7 @@ for (const auto& entry : *tilingMapHashmap) {
     {
     std::cout<<"index_x,index_y"<<entry.second.index_x<<", "<<entry.second.index_y<<std::endl;
     visualization_msgs::Marker marker;
-    marker.header.frame_id = "map";
+    marker.header.frame_id = world_frame_;
     marker.header.stamp = ros::Time::now();
     marker.ns = "tiling_map";
     marker.id = marker_array.markers.size(); // 使用数组大小作为 ID
@@ -90,7 +93,7 @@ for (const auto& entry : *tilingMapHashmap) {
     Eigen::Vector3d gridCenterpose=tiling_map_ptr ->getGridCenter(entry.first);
 
     visualization_msgs::Marker marker;
-    marker.header.frame_id = "map";
+    marker.header.frame_id = world_frame_;
     marker.header.stamp = ros::Time::now();
     marker.ns = "tiling_map";
     marker.id = marker_array.markers.size(); // 使用数组大小作为 ID
@@ -154,7 +157,7 @@ marker_pub_.publish(marker_array);
 //     Eigen::Vector3d gridCenterpose=tiling_map_ptr ->getGridCenter(entry.first);
 
 //     visualization_msgs::Marker marker;
-//     marker.header.frame_id = "map";
+//     marker.header.frame_id = world_frame_;
 //     marker.header.stamp = ros::Time::now();
 //     marker.ns = "tiling_map";
 //     marker.id = marker_array.markers.size(); // 使用数组大小作为 ID

@@ -4,15 +4,18 @@
 namespace TilingMap{
 
 
-tiling_map::tiling_map(float _resolution, float _bound_box_x_min, float _bound_box_x_max,float _bound_box_y_min,float _bound_box_y_max)
-{
-
+tiling_map::tiling_map(float _resolution, float _bound_box_x_min, float _bound_box_x_max,
+                                    float _bound_box_y_min,float _bound_box_y_max, 
+                                    float _bound_box_z_min, float _bound_box_z_max
+                                    ){
 
 resolution=_resolution;
 bound_box_x_min=_bound_box_x_min;
 bound_box_x_max=_bound_box_x_max;
 bound_box_y_min=_bound_box_y_min;
 bound_box_y_max=_bound_box_y_max;
+bound_box_z_min=_bound_box_z_min;
+bound_box_z_max=_bound_box_z_max;
 map_origin_<<0,0,0;
 
 genTilingGrid();
@@ -67,12 +70,15 @@ bool tiling_map::genTilingGrid(){
 bool tiling_map::updateMapbyRobotPose(Eigen::Vector3d point)
 {
 
-double checkFreeRadius=5;
+double checkFreeRadius=10;
 
 Eigen::Vector3i index=PointToIndex(point);
 Eigen::Vector3d grid_center_pose=getGridCenter(index);
 
+
 double distance = (grid_center_pose - point).norm();
+
+
 
 if (distance<checkFreeRadius){
 
@@ -104,7 +110,7 @@ Eigen::Vector3d tiling_map::getGridCenter(Eigen::Vector3i index)const{
         Eigen::Vector3d center = map_origin_ +
                 (index.cast<double>() + Eigen::Vector3d(0.5,0.5,0.5)) * resolution;
 
-        center.z()=0;
+        center.z()=bound_box_z_min;
         return center;
 
 }

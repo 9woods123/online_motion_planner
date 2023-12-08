@@ -72,10 +72,13 @@ namespace TilingMap{
 
     class tiling_map{
 
-        public:
-
+        public:         
+            
             tiling_map(float _resolution, float _bound_box_x_min, float _bound_box_x_max,
-                                    float _bound_box_y_min,float _bound_box_y_max);
+                                    float _bound_box_y_min,float _bound_box_y_max, 
+                                    float _bound_box_z_min, float _bound_box_z_max
+                                    );
+
             bool updateMapbyRobotPose(Eigen::Vector3d point);
             const TilingMapHashmap* getTilingMapHashmap()const;
             Eigen::Vector3d getGridCenter(Eigen::Vector3i index)const;
@@ -88,6 +91,8 @@ namespace TilingMap{
             float bound_box_x_max;
             float bound_box_y_min;
             float bound_box_y_max;
+            float bound_box_z_min;
+            float bound_box_z_max;
 
             Eigen::Vector3d map_origin_;
             TilingMapHashmap tiling_map_hashmap;

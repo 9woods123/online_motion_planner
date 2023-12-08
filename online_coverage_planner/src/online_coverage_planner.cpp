@@ -23,12 +23,16 @@ online_coverage_planner::online_coverage_planner(const ros::NodeHandle& nh,
                                          &online_coverage_planner::planning_loop,this);
     
 
+
     tiling_map_ptr=std::make_shared<TilingMap::tiling_map>(
         online_coverage_planner::tiling_resolution,
         online_coverage_planner::bound_box_x_min,
         online_coverage_planner::bound_box_x_max,
         online_coverage_planner::bound_box_y_min,
-        online_coverage_planner::bound_box_y_max);
+        online_coverage_planner::bound_box_y_max,
+        online_coverage_planner::bound_box_z_min,
+        online_coverage_planner::bound_box_z_max
+        );
         
     visualization_node.setTilingMap2vis(*tiling_map_ptr);
 
@@ -52,10 +56,12 @@ void online_coverage_planner::initParams() {
 void online_coverage_planner::poseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg)
 {
     current_pose = *msg;
+    // std::cout<<" callback current_pose="<<current_pose<<std::endl;
 }
 
 TilingMap::tilingGrid online_coverage_planner::decideNextAreaToExplore(){
 
+std::cout<<"==========decideNextAreaToExplore=========="<<std::endl;
 
 
     const auto tilingMapHashmap=tiling_map_ptr->getTilingMapHashmap();
@@ -93,7 +99,8 @@ TilingMap::tilingGrid online_coverage_planner::decideNextAreaToExplore(){
     //         std::cout<<"debug"<<"tiling grid index= "<<tiling_grid.second.index_x<<", "<<tiling_grid.second.index_y
     //         <<"    potential=="<< tiling_grid.second.potential<<std::endl;
     // }
-        std::cout<<grid_max_p.index_x<<", "<<grid_max_p.index_y<<" p="<<grid_max_p.potential<<std::endl;
+
+        // std::cout<<grid_max_p.index_x<<", "<<grid_max_p.index_y<<" p="<<grid_max_p.potential<<std::endl;
 
 return grid_max_p;
 
@@ -105,19 +112,20 @@ void online_coverage_planner::planning_loop(const ros::TimerEvent &event) {
 
 // TODO 更新地图，此处后续应该改为更具传感器数据更新地图，这里用robotPose是因为
 // 没想好传感器的具体形式，只能假设随着机器人移动，传感器数据是覆盖机器人pose周围的一种扫描。
+// std::cout<<"planning_loop current_pose=="<<current_pose<<std::endl;
 
 Eigen::Vector3d robot_pose(current_pose.pose.position.x,
                                                             current_pose.pose.position.y,
                                                             current_pose.pose.position.z);
 
+// std::cout<<"===================debug coverage==============="<<std::endl;
+// std::cout<<"robot_pose ="<<robot_pose.x()<<", "<<robot_pose.y()<<", "<<robot_pose.z()<<std::endl;
+
+
 tiling_map_ptr->updateMapbyRobotPose(robot_pose);
 
 
-
 TilingMap::tilingGrid nextBextGrid=decideNextAreaToExplore();
-
-std::cout<<"==========decideNextAreaToExplore=========="<<std::endl;
-
 
 
 visualization_node.drawMapinRviz(nextBextGrid);

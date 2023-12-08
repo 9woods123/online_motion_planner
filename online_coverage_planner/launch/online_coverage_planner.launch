@@ -2,12 +2,12 @@
     <!-- launch the motion planner-->
 
     <arg name="robot_name" default="eca_a9"/>
-    <arg name="tiling_resolution" default="5"/>
-    <arg name="bound_box_x_min" default="-10"/>
-    <arg name="bound_box_x_max" default="10"/>
-    <arg name="bound_box_y_min" default="-10"/>
-    <arg name="bound_box_y_max" default="10"/>
-    <arg name="bound_box_z_min" default="-10"/>
+    <arg name="tiling_resolution" default="100"/>
+    <arg name="bound_box_x_min" default="-200"/>
+    <arg name="bound_box_x_max" default="200"/>
+    <arg name="bound_box_y_min" default="-200"/>
+    <arg name="bound_box_y_max" default="200"/>
+    <arg name="bound_box_z_min" default="-100"/>
     <arg name="bound_box_z_max" default="0"/>
 
     <!-- <arg name="tiling_resolution" default="35"/>
@@ -21,6 +21,8 @@
     <arg name="robot_pose_topic" default="/$(arg robot_name)/ground_truth_to_tf_eca_a9/pose"/>
     <arg name="goal_topic" default="/goal"/>
 
+
+    <!-- <include file="$(find online_motion_planner)/launch/online_motion_planner.launch"/> -->
 
     <node name="online_coverage_planner_node" pkg="online_coverage_planner" type="online_coverage_planner_node" output="screen">
 
@@ -38,6 +40,10 @@
     </node>
 
 
-<node type="rviz" name="rviz" pkg="rviz" args="-d $(find online_coverage_planner)/rviz/online_coverage_planner.rviz" />
+<!-- <node type="rviz" name="rviz" pkg="rviz" args="-d $(find online_coverage_planner)/rviz/online_coverage_planner.rviz" /> -->
+
+
+
+
 
 </launch>

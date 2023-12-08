@@ -5,8 +5,8 @@
     <!-- planning params -->
     <arg name="planning_horizon" default="35"/>
     <arg name="replan_horizon" default="10"/>
-    <arg name="planning_resolution" default="1"/>
-    <arg name="radius_min" default="15"/>
+    <arg name="planning_resolution" default="0.25"/>
+    <arg name="radius_min" default="20"/>
     <arg name="astar_iteration" default="15000" />
     <arg name="bound_box_length" default="3" />
     <arg name="bound_box_width" default="2" />

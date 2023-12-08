@@ -25,8 +25,11 @@ private:
 
     ros::Subscriber goal_sub;
 
+    ros::ServiceClient  motion_client;
+    
     ros::Timer planner_timer;
     ros::Rate rate_;
+
 
     std::shared_ptr<TilingMap::tiling_map> tiling_map_ptr;
     visualization visualization_node;
@@ -36,6 +39,9 @@ private:
     geometry_msgs::PoseStamped current_pose;
     Eigen::Vector3d robot_position;
 
+    TilingMap::tilingGrid currBextGrid;
+
+    
 //  local msgs and datas
 
 //============================parameters===================================
