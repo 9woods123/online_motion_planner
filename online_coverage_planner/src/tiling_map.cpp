@@ -70,21 +70,32 @@ bool tiling_map::genTilingGrid(){
 bool tiling_map::updateMapbyRobotPose(Eigen::Vector3d point)
 {
 
-double checkFreeRadius=10;
+double checkFreeRadius=15;
 
 Eigen::Vector3i index=PointToIndex(point);
 Eigen::Vector3d grid_center_pose=getGridCenter(index);
 
+// 这是个2纬的计算，但是为用Vector3d来存储，这导致，使用norm计算时， 第三个纬度也会被算进去。
 
-double distance = (grid_center_pose - point).norm();
+// double distance = (grid_center_pose - point).norm();
 
+double distance =sqrt(
+    (grid_center_pose.x()-point.x())*(grid_center_pose.x()-point.x())
++(grid_center_pose.y()-point.y())*(grid_center_pose.y()-point.y())
+);
+
+
+std::cout<<"robot =="<<point.x()<<", "<<point.y()<<std::endl;
+std::cout<<"center  =="<<grid_center_pose.x()<<", "<<grid_center_pose.y()<<std::endl;
+
+std::cout<<"distance  =="<<distance<<std::endl;
 
 
 if (distance<checkFreeRadius){
 
 tiling_map_hashmap[index].grid_state=gridState::FREE;
 tiling_map_hashmap[index].potential=0;
-
+// std::cout<<"cleaning index=="<<index.x()<<", "<<index.y()<<std::endl;  
 }
 
 }

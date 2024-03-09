@@ -116,7 +116,7 @@ Node4D* Algorithm::hybridAStar(Node4D& start,
   // update local obstacle list of configurationSpace
   // save computing cost by avoiding
   // search obstacle multi times.
-  configurationSpace.initObstacleList(&start,search_horizon);
+//   configurationSpace.initObstacleList(&start,search_horizon);
   /////////////////////////////////////////
 
 
@@ -285,9 +285,22 @@ Node4D* Algorithm::hybridAStar(Node4D& start,
 void Algorithm::updateH(Node4D& start, const Node4D& goal,CollisionDetection& configurationSpace, Visualize& visualization)
 {
 
+//  algo  comparisonabs(start.getT()-goal.getT())+
+//     double simpleShortestDist=sqrt(
+//         SQ(start.getX()-goal.getX())+
+//         SQ(start.getY()-goal.getY())+
+//         SQ(start.getZ())-goal.getZ());
+    
+//     double dyaw=abs(start.getT()-goal.getT());
+//     dyaw=std::min(dyaw,(2*M_PI-dyaw));
+
+//     float ass_vmax=2;
+//     float ass_omegamax=M_1_PI/3;
+//     start.setH(std::max(simpleShortestDist, ass_omegamax*dyaw/ass_vmax));
+//   return ;
+
+
   // TEST SimpleHeuristicCal here , and return;
-  //start.setH(SimpleHeuristicCal(start,goal));
-  //return ;
   //TODO
 
   double dubinsCost = 0;
@@ -310,9 +323,9 @@ void Algorithm::updateH(Node4D& start, const Node4D& goal,CollisionDetection& co
     double dbEnd_yaw = goal.getT(); // 设置航向角
     dbEnd->setXY(goal.getX(),goal.getY());
     dbEnd->setYaw(dbEnd_yaw);
-    dubinsCost = dubinsPath.distance(dbStart, dbEnd);
-    dubinsCost+=double(std::abs(start.getZ()-goal.getZ()));
-
+    float twoDdubinsCost = dubinsPath.distance(dbStart, dbEnd);
+    dubinsCost=sqrt(twoDdubinsCost*twoDdubinsCost +(start.getZ()-goal.getZ())*(start.getZ()-goal.getZ()) );
+    // dubinsCost+=double(std::abs(start.getZ()-goal.getZ()));
   }
 
   // if reversing is active use a

@@ -3,17 +3,17 @@
 
     <arg name="robot_name" default="eca_a9"/>
     <!-- planning params -->
-    <arg name="planning_horizon" default="35"/>
+    <arg name="planning_horizon" default="40"/>
     <arg name="replan_horizon" default="10"/>
-    <arg name="planning_resolution" default="0.25"/>
-    <arg name="radius_min" default="20"/>
+    <arg name="planning_resolution" default="0.75"/>
+    <arg name="radius_min" default="17.5"/>
     <arg name="astar_iteration" default="15000" />
     <arg name="bound_box_length" default="3" />
     <arg name="bound_box_width" default="2" />
     <arg name="bound_box_height" default="2" />
-    <arg name="collision_distance" default="0.5" />
-    <arg name="v_max" default="2" />
-    <arg name="a_max" default="0.15" />
+    <arg name="collision_distance" default="2" />
+    <arg name="v_max" default="1.7" />
+    <arg name="a_max" default="0.35" />
     <arg name="dt" default="0.5" />
 
 
@@ -26,9 +26,9 @@
 
 
     <!-- mapping params -->
-    <arg name="voxel_size" default="0.5"/>
+    <arg name="voxel_size" default="0.75"/>
     <arg name="voxels_per_side" default="16"/>
-    <arg name="ray_length" default="40"/>
+    <arg name="ray_length" default="50"/>
     <arg name="method" default="fast"/>
     <arg name="verbose_voxblox" default="false"/>
     <!-- mapping params -->

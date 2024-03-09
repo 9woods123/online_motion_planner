@@ -25,7 +25,7 @@ void Node4D::setMotionPrims() {
     float delta_distance=delta_t*Node4D::radius_min;
     float dy_array[]=   { 0,              -delta_y,   delta_y,  0 ,         0               };
     float dx_array[]  = { delta_distance, delta_x,    delta_x,  delta_x ,   delta_x         };
-    float dz_array[]  = { 0,              0,          0,        delta_x/5,  -delta_x/5      };
+    float dz_array[]  = { 0,              0,          0,        delta_x/4,  -delta_x/4      };
     float dt_array[]  = { 0,              -delta_t,   delta_t,  0,          0               };
 
 

@@ -350,7 +350,7 @@ void online_motion_planner::planning_loop(const ros::TimerEvent &event) {
             } else
             {
                 ROS_INFO_STREAM("\033[1;31m Failed to find a path \033[0m");
-//                holdOn();
+                holdOn();
                 break;
             }
         }

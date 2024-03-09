@@ -29,12 +29,12 @@ marker_array.markers.clear();
 
 const auto tilingMapHashmap=tiling_map_ptr->getTilingMapHashmap();
 
-std::cout<<"=========================debug drawMapinRviz========================="<<std::endl;
+// std::cout<<"=========================debug drawMapinRviz========================="<<std::endl;
 
-for (const auto& tiling_grid : *tilingMapHashmap) {
-        std::cout<<"debug"<<"tiling grid index= "<<tiling_grid.second.index_x<<", "<<tiling_grid.second.index_y
-        <<"    potential=="<< tiling_grid.second.potential<<std::endl;
-}
+// for (const auto& tiling_grid : *tilingMapHashmap) {
+//         std::cout<<"debug"<<"tiling grid index= "<<tiling_grid.second.index_x<<", "<<tiling_grid.second.index_y
+//         <<"    potential=="<< tiling_grid.second.potential<<std::endl;
+// }
 
 // 遍历hashmap，绘制栅格，高度代表了对应的潜在价值。
 float grid_resolution=tiling_map_ptr->getResolution();
@@ -60,7 +60,6 @@ for (const auto& entry : *tilingMapHashmap) {
     if (entry.second.grid_state==TilingMap::gridState::UNKNOWN)
     {
     marker.scale.z =entry.second.potential*1;
-
     }
     else{
     marker.scale.z =0.1;
@@ -107,16 +106,11 @@ for (const auto& entry : *tilingMapHashmap) {
     if (entry.second.grid_state==TilingMap::gridState::UNKNOWN)
     {
     marker.scale.z =entry.second.potential*1;
-    }
-    else{
-            marker.scale.z =0.1;
-    }
 
     marker.pose.position.x = gridCenterpose.x();
     marker.pose.position.y = gridCenterpose.y();
     marker.pose.position.z = gridCenterpose.z() + marker.scale.z / 2.0;         //TODO modify to bound_box_z_min
     
-
     marker.pose.orientation.x = 0.0;
     marker.pose.orientation.y = 0.0;
     marker.pose.orientation.z = 0.0;
@@ -127,6 +121,25 @@ for (const auto& entry : *tilingMapHashmap) {
     marker.color.g = 0.15;
     marker.color.b = 0.0;
     marker.color.a = 0.5; // 设置透明度
+
+    }
+    else{
+            marker.scale.z =0.1;
+            marker.pose.position.x = gridCenterpose.x();
+            marker.pose.position.y = gridCenterpose.y();
+            marker.pose.position.z = gridCenterpose.z() + marker.scale.z / 2.0;         //TODO modify to bound_box_z_min
+            
+            marker.pose.orientation.x = 0.0;
+            marker.pose.orientation.y = 0.0;
+            marker.pose.orientation.z = 0.0;
+            marker.pose.orientation.w = 1.0;
+
+            marker.color.r = 0.0; // 设置颜色
+            marker.color.g = 0.0;
+            marker.color.b = 0.1;
+            marker.color.a = 0.2; // 设置透明度
+    }
+
 
     marker.lifetime = ros::Duration(0); // 持续时间设为0，表示一直显示
 

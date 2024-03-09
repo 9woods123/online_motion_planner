@@ -10,7 +10,6 @@ CollisionDetection::CollisionDetection() {
 
 }
 
-
 void CollisionDetection::initConfiguration(const ros::NodeHandle &nh, const ros::NodeHandle &nh_private,
                                        const double map_resolution, const double occur_threshold,
                                        const double free_threshold) {

@@ -3,7 +3,7 @@
 
     <arg name="x" default="-200"/>
     <arg name="y" default="85"/>
-    <arg name="z" default="-88"/>
+    <arg name="z" default="-90"/>
 
     <arg name="yaw" default="0"/>
     <arg name="use_ned_frame" default="false"/>
