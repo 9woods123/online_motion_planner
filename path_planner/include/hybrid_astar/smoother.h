@@ -29,7 +29,8 @@ namespace HybridAStar {
 
 
         /// obstacleCost - pushes the path away from obstacles
-        Eigen::Vector3d obstacleTerm(Eigen::Vector3d xi,const HybridAStar::CollisionDetection *configurationSpace);
+        Eigen::Vector3d obstacleTerm(Eigen::Vector3d xi,const HybridAStar::CollisionDetection *configurationSpace
+        ,double& obstacle_cost);
 
         Eigen::Vector3d targetobstacleTerm(Eigen::Vector3d xi,const HybridAStar::CollisionDetection *configurationSpace);
 
@@ -39,7 +40,7 @@ namespace HybridAStar {
         /// smoothnessCost - attempts to spread nodes equidistantly and with the same orientation
         Eigen::Vector3d smoothnessTerm(Eigen::Vector3d xim3,Eigen::Vector3d xim2, Eigen::Vector3d xim1,
                                        Eigen::Vector3d xi,
-                                       Eigen::Vector3d xip1, Eigen::Vector3d xip2,Eigen::Vector3d xip3);
+                                       Eigen::Vector3d xip1, Eigen::Vector3d xip2,Eigen::Vector3d xip3, double& smooth_cost);
 
         float FeasibleTerm(Eigen::Vector3d xim2, Eigen::Vector3d xim1,
                                        Eigen::Vector3d xi,
@@ -50,18 +51,6 @@ namespace HybridAStar {
                                        );
 
         std::vector<double> adjustPathTime(std::vector<Node4D> &path, double v_init , double v_max, double a_max);
-        void printPathInfo(const std::vector<Node4D>& path, const std::vector<double>& new_times);
-
-        float getVelPenaltyGradient(double deltaXK, double deltaXKim1,
-                                    double tK, double tKp1, double tKim1, float v_max);
-
-        float getAccPenaltyGradient(double delta_v_k,double delta_v_kim1,double t_k,
-                                    double t_kp1,double t_kim1,double a_max);
-
-        float getAccSmoothGradient(double delta_v_k,double delta_v_kim1,double t_k,
-                                    double t_kp1,double t_kim1,double a_max);
-
-        float getTimeBarrierGradient(double tK, double tKp1, double tKim1);
 
         bool smooth(const HybridAStar::CollisionDetection *configurationSpace,double d_t,double v_init ,double v_max, double a_max);
 

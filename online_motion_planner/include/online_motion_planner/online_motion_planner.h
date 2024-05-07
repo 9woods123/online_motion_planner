@@ -109,6 +109,8 @@ private:
     float a_max_;
     float dt_;
 
+// data record
+    std::ofstream record_file;
 //===================================private function===================================
 
     void initPlanner();
@@ -126,8 +128,16 @@ private:
     geometry_msgs::PoseStamped getTrajPointFromTime(ros::Time current_time);
     double getVelFromTime(ros::Time current_time);
 
+    void writeToCSV( const double& costs);
 public:
     online_motion_planner(const ros::NodeHandle& nh, const ros::NodeHandle& nh_private);
+    ~online_motion_planner(){
+        record_file.close();
+        std::cout<<"~~~online_motion_planner"<<std::endl;
+    }
+    void closeCSV(){
+        record_file.close();
+    }
 
 };
 

@@ -76,9 +76,8 @@ void Node4D::updateG() {
         g += dx[0] * Constants::penaltyTurning;
       }
     } else {
-
-      g += dx[0];
-      g +=std::abs(dz[prim]);
+      
+      g += sqrt(dx[0]*dx[0]+ dz[prim]*dz[prim]);
 
     }
   }
@@ -94,8 +93,8 @@ void Node4D::updateG() {
       }
     } else {
 
-      g += dx[0] * Constants::penaltyReversing;
-      g +=std::abs(dz[prim]);
+      g += sqrt(dx[0]*dx[0]*Constants::penaltyReversing +dz[prim]*dz[prim]);
+
     }
   }
 }

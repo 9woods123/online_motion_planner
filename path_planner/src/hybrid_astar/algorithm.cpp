@@ -286,18 +286,29 @@ void Algorithm::updateH(Node4D& start, const Node4D& goal,CollisionDetection& co
 {
 
 //  algo  comparisonabs(start.getT()-goal.getT())+
-//     double simpleShortestDist=sqrt(
-//         SQ(start.getX()-goal.getX())+
-//         SQ(start.getY()-goal.getY())+
-//         SQ(start.getZ())-goal.getZ());
-    
-//     double dyaw=abs(start.getT()-goal.getT());
-//     dyaw=std::min(dyaw,(2*M_PI-dyaw));
+    // double simpleShortestDist=
+    // abs(start.getX()-goal.getX())
+    // +    abs(start.getY()-goal.getY())
+    // +    abs(start.getZ()-goal.getZ());
 
-//     float ass_vmax=2;
-//     float ass_omegamax=M_1_PI/3;
-//     start.setH(std::max(simpleShortestDist, ass_omegamax*dyaw/ass_vmax));
+    double delta_x= abs(start.getX()-goal.getX());
+    double delta_y= abs(start.getY()-goal.getY());
+    double delta_z= abs(start.getZ()-goal.getZ());
+
+    double simpleShortestDist=std::sqrt(delta_x*delta_x+ delta_y*delta_y +delta_z*delta_z);
+
+    
+
+//     start.setH(simpleShortestDist);
 //   return ;
+
+    double dyaw=abs(start.getT()-goal.getT());
+    dyaw=std::min(dyaw,(2*M_PI-dyaw));
+
+    float ass_vmax=2;
+    float ass_omegamax=M_1_PI/3;
+    start.setH(std::max(simpleShortestDist, ass_omegamax*dyaw/ass_vmax));
+  return ;
 
 
   // TEST SimpleHeuristicCal here , and return;

@@ -1,6 +1,6 @@
 #include <ros/ros.h>
 #include <online_motion_planner/online_motion_planner.h>
-
+#include <fstream>
 using namespace std;
 
 
@@ -25,6 +25,8 @@ online_motion_planner::online_motion_planner(const ros::NodeHandle &nh,
     local_planning_timer=nh_.createTimer(rate_.expectedCycleTime(),
                                          &online_motion_planner::planning_loop,this);
 
+    //data record
+    record_file.open("/home/woods/uuv/motion_planner_ws/src/online_motion_planner/scripts/path_planning_comptime.csv");
 }
 
 void online_motion_planner::initPlanner() {
@@ -334,7 +336,7 @@ void online_motion_planner::planning_loop(const ros::TimerEvent &event) {
 
             double cost=ros::Time::now().toSec() - traj_start_time.toSec();
             ROS_INFO_STREAM("\033[1;32m HybridAStar calculation cost "<<cost<<"s \033[0m");
-
+            writeToCSV(cost);
 
             // TRACE THE PATH
             smoother.tracePath(nSolution);
@@ -376,6 +378,7 @@ void online_motion_planner::planning_loop(const ros::TimerEvent &event) {
                     (Start, Goal, configurationSpace, visualization);
             double cost=ros::Time::now().toSec()-traj_start_time.toSec();
             ROS_INFO_STREAM("\033[1;32m hybridAStar calculation cost "<<cost<<"s \033[0m");
+            writeToCSV(cost);
 
             //TODO   v_init  should be   v_current_ref, we use v_max_ to test  raw codes.
 
@@ -425,6 +428,16 @@ void online_motion_planner::planning_loop(const ros::TimerEvent &event) {
     }
 
     ros::spinOnce();
+
+}
+
+void online_motion_planner::writeToCSV(const double& cost) {
+
+    if (record_file.is_open()) {
+            record_file << cost<< std::endl; // 写入cost并换行
+    } else {
+        std::cerr << "无法打开文件！" << std::endl;
+    }
 
 }
 
