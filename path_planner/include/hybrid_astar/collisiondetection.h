@@ -15,7 +15,6 @@
 
 #include <Eigen/Geometry>
 #include "voxblox_ros/esdf_server.h"
-#include <target_probability_map/tp_map_server.h>
 
 
 using namespace Eigen;
@@ -42,7 +41,7 @@ namespace HybridAStar {
 
 
             std::shared_ptr<voxblox::EsdfServer> esdf_server_;
-            std::shared_ptr<tp_map::tp_map_server> tp_server_;
+            // std::shared_ptr<tp_map::tp_map_server> tp_server_;
             // params
             float bound_box_length_;
             float bound_box_width_;
@@ -58,7 +57,6 @@ namespace HybridAStar {
             void initConfiguration(const ros::NodeHandle &nh, const ros::NodeHandle &nh_private,
                                          const double map_resolution, const double occur_threshold,
                                          const double free_threshold);
-            void initObstacleList(const HybridAStar::Node4D *start, float search_horizon);
             bool isTraversable(const Node4D *node);
             bool isTraversable(const Node3D *node);
 

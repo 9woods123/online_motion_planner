@@ -19,7 +19,6 @@
   <depend>tf</depend>
   <depend>mav_trajectory_generation</depend>
   <depend>mav_msgs</depend>
-  <depend>target_probability_map</depend>
 
 
 </package>

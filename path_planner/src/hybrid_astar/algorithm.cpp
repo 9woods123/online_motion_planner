@@ -160,11 +160,6 @@ Node4D* Algorithm::hybridAStar(Node4D& start,
                              Visualize& visualization)
 {
 
-  // update local obstacle list of configurationSpace
-  // save computing cost by avoiding
-  // search obstacle multi times.
-//   configurationSpace.initObstacleList(&start,search_horizon);
-  /////////////////////////////////////////
 
 
   // PREDECESSOR AND SUCCESSOR INDEX

@@ -23,7 +23,7 @@ find_package(catkin REQUIRED COMPONENTS
     tf
     octomap_msgs
     interactive_markers
-    target_probability_map
+    
     )
 
     set(SOURCES

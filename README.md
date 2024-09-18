@@ -1,58 +1,58 @@
-# online_motion_planner
 
+# Online Motion Planner
 
+**Online Motion Planner** uses the A* algorithm to find feasible motion trajectories for Autonomous Underwater Vehicles (AUVs). The planner replans the trajectory when a collision is detected or the planning horizon is reached.
 
-**online_motion_planner**  uses astar to find a feasible motion trajectory, and replan is done when collosion happened and horizon is reached.
+## Prerequisites
 
+1. **Install ROS**  
+   Follow the [ROS Installation guide](http://wiki.ros.org/ROS/Installation) to install ROS (Desktop-Full recommended).
 
-**Prerequisites**
+2. **Set Up Catkin Workspace**  
+   Install `catkin tools` and create a workspace:
 
-1. If not already done so, install [ROS](http://wiki.ros.org/ROS/Installation) (Desktop-Full is recommended).
+   ```bash
+   sudo apt-get install python-catkin-tools
+   mkdir -p ~/catkin_ws/src
+   cd ~/catkin_ws/src
+   ```
 
-2. If not already done so, create a catkin workspace with [catkin tools](https://catkin-tools.readthedocs.io/en/latest/):
+3. **Clone Repositories and Install Dependencies**  
+   Clone the required repositories and install necessary dependencies:
 
-```shell script
-sudo apt-get install python-catkin-tools
-mkdir -p ~/catkin_ws/src
-git clone https://github.com/9woods123/uuv_sim.git
-git clone https://github.com/ethz-asl/voxblox.git
-git clone https://github.com/9woods123/online_motion_planner.git
-cd ~/catkin_ws
-catkin_make
-```
+   ```bash
+   git clone https://github.com/9woods123/online_motion_planner.git
+   vcs import . < online_motion_planner/online_motion_planner/omp_https.rosinstall --recursive
+   sudo apt-get install libgoogle-glog-dev nvidia-cuda-toolkit
+   pip3 install scipy
+   ```
+
+4. **Build the Workspace**  
+   Compile the workspace in Release mode:
+
+   ```bash
+   cd ~/catkin_ws
+   catkin_make -DCMAKE_BUILD_TYPE=Release
+   ```
 
 ## Run An Experiment
 
-In order to launch a auv, firstly launch a gazebo world:
+1. **Launch Gazebo World**  
+   Start by launching a Gazebo world:
 
-```
-roslaunch uuv_gazebo_worlds ocean_waves.launch 
-```
+   ```bash
+   roslaunch uuv_gazebo_worlds ocean_waves.launch
+   ```
 
-```
- roslaunch online_motion_planner eca9_a9_upload.launch
-```
+3. **Launch the Motion Planner**  
+   Run the motion planner:
 
-```
-roslaunch online_motion_planner online_motion_planner.launch
-```
+   ```bash
+   roslaunch online_motion_planner online_motion_planner.launch
+   ```
 
+## Using RViz
 
-
-
-Using  rviz 3d nav goal to give a gobal goal pose.  If you want to modify the initial height of 3d nav goal, you can look into the cpp in rviz-3d-nav-goal-tool.
-
-
-Some important log info can help you to work on this tools.
+Use the **RViz 3D Nav Goal** tool to set a global goal pose for the AUV. If you need to adjust the initial height of the 3D Nav Goal, you can modify the C++ code in the `rviz-3d-nav-goal-tool` package.
 
 
-
-
-sudo apt-get install libgoogle-glog-dev
-
-sudo apt install nvidia-cuda-toolkit
-
-pip3 install scipy
-pip install scipy
-
-catkin_make -DCMAKE_BUILD_TYPE=Release

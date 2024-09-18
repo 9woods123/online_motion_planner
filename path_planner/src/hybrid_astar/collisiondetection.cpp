@@ -14,18 +14,8 @@ void CollisionDetection::initConfiguration(const ros::NodeHandle &nh, const ros:
 
     esdf_server_.reset(new voxblox::EsdfServer(nh, nh_private));   // begin an esdf ros process
     esdf_server_->setTraversabilityRadius(0.2);
-    // tp_server_.reset(new tp_map::tp_map_server(nh,nh_private,0.1,0.25,0.85));
 }
 
-void CollisionDetection::initObstacleList(const HybridAStar::Node4D *start,float search_horizon) {
-
-        //TODO store the obstacle by octree
-        obstacle_list.clear();
-        std::vector<float> existDists;
-        tp_server_->getmapPtr()->radiusSearch(Eigen::Vector3d(start->getX(),start->getY(),start->getZ())
-        ,search_horizon,obstacle_list,existDists);
-
-}
 
 
 bool CollisionDetection::getDistanceAndGradientAtPosition(
