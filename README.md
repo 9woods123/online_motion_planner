@@ -1,5 +1,5 @@
-
-# Online Motion Planner
+✅ Tested on Ubuntu 20.04 + ROS Noetic
+# Online Motion Planner 
 
 **Online Motion Planner** is a trajectory planning framework that uses the A* algorithm to generate a 3d feasible motion trajectories for mobile robots. The planner performs online replanning whenever a potential collision is detected or the planning horizon is reached.
 
@@ -18,6 +18,7 @@ If you find this work helpful, please consider citing:
 
 
 ## Prerequisites
+
 
 1. **Install ROS**  
    Follow the [ROS Installation guide](http://wiki.ros.org/ROS/Installation) to install ROS (Desktop-Full recommended).
