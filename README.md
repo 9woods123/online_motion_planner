@@ -14,6 +14,7 @@ If you find this work helpful, please consider citing:
   booktitle = {IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
   year      = {2025}
 }
+```
 
 
 ## Prerequisites
