@@ -30,10 +30,7 @@
     uri: https://github.com/ethz-asl/catkin_boost_python_buildtool.git
 - git:
     local-name: catkin_grpc
-    uri: https://github.com/CogRob/catkin_grpc.git
-- git:
-    local-name: voxblox
-    uri: https://github.com/ethz-asl/voxblox.git
+    uri: https://github.com/9woods123/catkin_grpc.git
 - git:
     local-name: auv_sim
     uri: https://github.com/9woods123/uuv_sim.git

@@ -23,8 +23,26 @@
    ```bash
    git clone https://github.com/9woods123/online_motion_planner.git
    vcs import . < online_motion_planner/online_motion_planner/omp_https.rosinstall --recursive
-   sudo apt-get install libgoogle-glog-dev nvidia-cuda-toolkit
+   sudo apt-get update && sudo apt-get install -y \
+      libgoogle-glog-dev \
+      nvidia-cuda-toolkit \
+      python3-vcstool \
+      python3-catkin-tools \
+      ros-$ROS_DISTRO-cmake-modules \
+      protobuf-compiler \
+      autoconf \
+      git \
+      rsync \
+      ros-$ROS_DISTRO-mavros-msgs \
+      ros-$ROS_DISTRO-tf2-sensor-msgs \
+      ros-$ROS_DISTRO-nlopt \
+      ros-$ROS_DISTRO-octomap-msgs \
+      ros-$ROS_DISTRO-ompl \
+      ros-$ROS_DISTRO-octomap-server \
+      libompl-dev
+
    pip3 install scipy
+
    ```
 
 4. **Build the Workspace**  

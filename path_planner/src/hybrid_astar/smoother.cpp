@@ -240,8 +240,7 @@ std::vector<double> Smoother:: getSegmentTimes(std::vector<Node4D>* path, double
 
      //====================== using  minimum snap to get a Polynomial Traj .======================
      std::vector<double> segment_times= Smoother::getSegmentTimes(&newPath,  v_init, v_max,  a_max);
-//     std::vector<double> segment_times= Smoother::adjustPathTime(newPath,  v_init, v_max,  a_max);
-
+//   std::vector<double> segment_times= Smoother::adjustPathTime(newPath,  v_init, v_max,  a_max);
 
      mav_msgs::EigenTrajectoryPoint::Vector waypoints;
      for(auto point:newPath)
