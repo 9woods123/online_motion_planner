@@ -1,7 +1,20 @@
 
 # Online Motion Planner
 
-**Online Motion Planner** uses the A* algorithm to find feasible motion trajectories for Autonomous Underwater Vehicles (AUVs). The planner replans the trajectory when a collision is detected or the planning horizon is reached.
+**Online Motion Planner** is a trajectory planning framework that uses the A* algorithm to generate a 3d feasible motion trajectories for mobile robots. The planner performs online replanning whenever a potential collision is detected or the planning horizon is reached.
+
+This method is general-purpose and can be applied to various robotic platforms. We have applied it to torpedo-shaped AUVs in a 3D underwater environment, and the method has been peer-reviewed and published at **IROS 2025**.
+
+If you find this work helpful, please consider citing:
+
+```bibtex
+@inproceedings{nine2025omp,
+  author    = {Woods Nine and Others},
+  title     = {Online Motion Planning for AUVs Using 3D Multibeam Sonar in Unknown Environments},
+  booktitle = {IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+  year      = {2025}
+}
+
 
 ## Prerequisites
 
@@ -68,6 +81,8 @@
    ```bash
    roslaunch online_motion_planner online_motion_planner.launch
    ```
+   
+![2025-06-19 23-29-30 的屏幕截图](https://github.com/user-attachments/assets/c4a82422-feeb-492e-aa99-9b6bdfc5f075)
 
 ## Using RViz
 
