@@ -37,7 +37,6 @@ If you find this work helpful, please consider citing:
 
    ```bash
    git clone https://github.com/9woods123/online_motion_planner.git
-   vcs import . < online_motion_planner/online_motion_planner/omp_https.rosinstall --recursive
    sudo apt-get update && sudo apt-get install -y \
       libgoogle-glog-dev \
       nvidia-cuda-toolkit \
@@ -57,6 +56,9 @@ If you find this work helpful, please consider citing:
       libompl-dev
 
    pip3 install scipy
+
+   vcs import . < online_motion_planner/online_motion_planner/omp_https.rosinstall --recursive
+
 
    ```
 
