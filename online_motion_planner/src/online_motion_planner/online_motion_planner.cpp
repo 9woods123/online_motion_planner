@@ -33,7 +33,7 @@ online_motion_planner::online_motion_planner(const ros::NodeHandle &nh,
                                          &online_motion_planner::planning_loop,this);
 
     //data record
-    record_file.open("/home/woods/uuv/motion_planner_ws/src/online_motion_planner/scripts/path_planning_comptime.csv");
+    // record_file.open("/home/woods/uuv/motion_planner_ws/src/online_motion_planner/scripts/path_planning_comptime.csv");
 }
 
 void online_motion_planner::initPlanner() {
@@ -478,7 +478,7 @@ void online_motion_planner::writeToCSV(const double& cost) {
     if (record_file.is_open()) {
             record_file << cost<< std::endl; // 写入cost并换行
     } else {
-        std::cerr << "无法打开文件！" << std::endl;
+        std::cerr << "can not openn the file" << std::endl;
     }
 
 }
