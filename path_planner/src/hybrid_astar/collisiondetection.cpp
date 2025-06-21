@@ -101,11 +101,6 @@ VoxelState CollisionDetection::checkVoxelState(Eigen::Vector3d point) {
 
 bool CollisionDetection::isTraversable(const HybridAStar::Node4D *node){
 
-    //  this function from chatgpt is error that it provides a solution calculating
-    //  a bound box using octomap->begin_leafs_bbx(min,max);
-    //  the bound box axis is fixed, two point are given to determine a cuboid
-    //  but the min and max point are opposite, when rotation happens, the
-    //  bound box are smaller than we imagined.
 
 
     float length=bound_box_length_;
@@ -156,13 +151,6 @@ bool CollisionDetection::isTraversable(const HybridAStar::Node4D *node){
 }
 
 bool CollisionDetection::isTraversable(const HybridAStar::Node3D *node){
-
-    //  this function from chatgpt is error that it provides a solution calculating
-    //  a bound box using octomap->begin_leafs_bbx(min,max);
-    //  the bound box axis is fixed, two point are given to determine a cuboid
-    //  but the min and max point are opposite, when rotation happens, the
-    //  bound box are smaller than we imagined.
-
 
     float length=2;
     float width =1;

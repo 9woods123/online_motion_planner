@@ -7,6 +7,7 @@ This method is general-purpose and can be applied to various robotic platforms. 
 
 If you find this work helpful, please consider citing:
 
+
 ```bibtex
 @inproceedings{nine2025omp,
   author    = {Woods Nine and Others},

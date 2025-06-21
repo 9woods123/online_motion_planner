@@ -1,10 +1,6 @@
 #include "hybrid_astar/algorithm.h"
 
-
-
 using namespace HybridAStar;
-
-
 
 bool Algorithm::GotGoal(Node4D& current, const Node4D& goal){
 
@@ -53,44 +49,6 @@ bool Algorithm::GotGoal(Node4D& current, const Node4D& goal){
 
     }
 
-
-//    std::cout<<"goal=="<<goal.getX()<<", "<<goal.getY()<<", "<<goal.getZ()<<", "<<goal.getT()/M_PI<<" pi"<<std::endl;
-//    std::cout<<"current=="<<current.getX()<<", "<<current.getY()<<", "<<current.getZ()<<", "<<current.getT()/M_PI<<" pi"<<std::endl;
-//    std::cout<<"current. G=="<<current.getG()<<"    current. H=="<<current.getH();
-//    std::cout<<"    e_dis=="<<e_dis<<"  yaw_dis=="<<yaw_dis/M_PI<<" pi "<<std::endl;
-// debug goal 1.99 pi, curr 0.05 pi, the yaw dis=1.94pi , however, we exc
-
-
-
-//     if(is_z_axis_considered_goal_check)
-//     {
-//         e_dis=std::sqrt(SQ(goal_id[0]-curr_id[0])+SQ(goal_id[1]-curr_id[1])+SQ(goal_id[2]-curr_id[2]));
-//     }
-//     else
-//     {
-//         e_dis=std::sqrt(SQ(goal_id[0]-curr_id[0])+SQ(goal_id[1]-curr_id[1]));
-//     }
-
-//     double yaw_dis=std::abs(goal_id[3]-curr_id[3]);
-//     yaw_dis=std::min(yaw_dis,(2*M_PI-yaw_dis));
-
-// //    std::cout<<"goal=="<<goal.getX()<<", "<<goal.getY()<<", "<<goal.getZ()<<", "<<goal.getT()/M_PI<<" pi"<<std::endl;
-// //    std::cout<<"current=="<<current.getX()<<", "<<current.getY()<<", "<<current.getZ()<<", "<<current.getT()/M_PI<<" pi"<<std::endl;
-// //    std::cout<<"current. G=="<<current.getG()<<"    current. H=="<<current.getH();
-// //    std::cout<<"    e_dis=="<<e_dis<<"  yaw_dis=="<<yaw_dis/M_PI<<" pi "<<std::endl;
-// // debug goal 1.99 pi, curr 0.05 pi, the yaw dis=1.94pi , however, we exc
-
-
-
-//     if(e_dis>4*planning_step/planning_resolution||yaw_dis>0.25*M_PI)
-//     {
-//         return false;
-//     }
-//     else
-//     {
-//         std::cout<<"HYbridAstar GotGoal"<<std::endl;
-//         return true;
-//     }
 
 }
 

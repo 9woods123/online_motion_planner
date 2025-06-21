@@ -1,5 +1,6 @@
 //
-// Created by woods on 23-5-21.
+// Created by Tianyou Yu (woods) on 2023-05-21.
+// Contact: tianyouyu9@163.com
 //
 
 #include <online_motion_planner/online_motion_planner.h>

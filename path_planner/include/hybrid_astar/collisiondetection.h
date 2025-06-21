@@ -1,3 +1,6 @@
+// Created by Tianyou Yu (woods)
+// Contact: tianyouyu9@163.com
+
 #ifndef COLLISIONDETECTION_H
 #define COLLISIONDETECTION_H
 

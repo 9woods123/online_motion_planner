@@ -1,13 +1,17 @@
-<?xml version="1.0"?>
 <package format="2">
   <name>hybrid_astar</name>
-  <version>0.0.0</version>
-  <description>The hybrid_astar package</description>
-  <maintainer email="kurzer@kth.se">Karl Kurzer</maintainer>
+  <version>0.1.0</version>
+  <description>
+    Extended Hybrid A* path planning package based on the original implementation by Karl Kurzer,
+    with support for 3D motion planning and underwater vehicle navigation.
+  </description>
+  <maintainer email="tianyouyu9@163.com">Tianyou Yu</maintainer>
   <license>BSD</license>
-  <author email="kurzer@kth.se">Karl Kurzer</author>
+  <author email="tianyouyu9@163.com">Tianyou Yu</author>
+
   <buildtool_depend>catkin</buildtool_depend>
   <buildtool_depend>catkin_simple</buildtool_depend>
+
   <depend>eigen_catkin</depend>
   <depend>roscpp</depend>
   <depend>rospy</depend>
@@ -19,6 +23,4 @@
   <depend>tf</depend>
   <depend>mav_trajectory_generation</depend>
   <depend>mav_msgs</depend>
-
-
 </package>

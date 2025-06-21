@@ -238,7 +238,13 @@ std::vector<double> Smoother:: getSegmentTimes(std::vector<Node4D>* path, double
      //================== an  optimization calculating by adjust the wapypoint===================
 
 
-     //====================== using  minimum snap to get a Polynomial Traj .======================
+    //====================== using  minimum snap to get a Polynomial Traj .======================
+    // The polynomial trajectory is generated from the coarse path (newPath)
+    // using minimum snap optimization. This step is necessary especially when
+    // the path is computed with a large search step size, resulting in sparse waypoints.
+    // The resulting smooth trajectory allows us to interpolate between waypoints,
+    // providing higher resolution for downstream modules such as control and collision checking.
+    //======================TODO(ues a easier and faster method (B-spline) instead of minimum snap)============================
      std::vector<double> segment_times= Smoother::getSegmentTimes(&newPath,  v_init, v_max,  a_max);
 //   std::vector<double> segment_times= Smoother::adjustPathTime(newPath,  v_init, v_max,  a_max);
 

@@ -1,3 +1,6 @@
+// Created by Tianyou Yu (woods)
+// Contact: tianyouyu9@163.com
+
 #include "hybrid_astar/node4d.h"
 
 using namespace HybridAStar;
@@ -60,87 +63,40 @@ Node4D*Node4D::generateNeibors(const int input_index){
   int j = input_index%dir_number;
   int auto_index;
 
-  // if (i==0){
-  //   auto_index=0;
-  // }else if(i==1)
-  // {
-  //   auto_index=-1;
-  // }else if (i==2)
-  // {
-  //   auto_index=1;
-  // }
-    double u_rate =  (i-1) * input_turning_rate_max / double((dir_number-1)/2) + 0.000001;
-  // float u_vel_z = (j - 1) * input_vel_z_max / float((dir_number-1)/2);
-    double u_vel_z =(j-1) * input_vel_z_max / double((dir_number-1)/2);
 
-// if (input_index==0){
-//   u_rate=  0.000001;
-//   u_vel_z =0 ;
-
-//   //向前进
-
-// }else if (input_index==1){
+  double u_rate =  (i-1) * input_turning_rate_max / double((dir_number-1)/2) + 0.000001;
+  double u_vel_z =(j-1) * input_vel_z_max / double((dir_number-1)/2);
 
 
-//   u_rate=   -1* input_turning_rate_max + 0.000001;
-//   u_vel_z =0 ;
-//   //向右拐
-// }
-
-// else if (input_index==2){
-
-//   u_rate=   1* input_turning_rate_max + 0.000001;
-//   u_vel_z =0 ;
-
-//   //向左拐
-// }
-
-// else if (input_index==3){
-
-//   u_rate=   + 0.000001;
-//   u_vel_z =0.5 ;
-
-//   //向左拐
-// }
-// else if (input_index==4){
-
-//   u_rate=   + 0.000001;
-//   u_vel_z =- 0.5 ;
-
-//   //向下
-// }
-
-
-  // std::cout<<"u_rate:"<<u_rate<<std::endl;
-
-  // float delta_x = input_vel_forward * cos(curr_theta) *delat_time;
-  // float delta_y = input_vel_forward * sin(curr_theta)* delat_time;
-  // float delta_z = u_vel_z* delat_time;
-  // float delta_t =  u_rate* delat_time;
-
-
-// 直接使用 v cos theta 和  v sin theta 來計算 delta ,会发现,无论u rate 如何,
+// float delta_x = input_vel_forward * cos(curr_theta) *delat_time;
+// float delta_y = input_vel_forward * sin(curr_theta)* delat_time;
+// float delta_z = u_vel_z* delat_time;
+// float delta_t =  u_rate* delat_time;
+//直接使用 v cos theta 和  v sin theta 來計算 delta ,会发现,无论u rate 如何,
 //即delta theta 如何, deltax和deltay 是一样的,虽然在计算node2ID时会考虑theta作为第四纬变量,
 //但是其密度和三维空间的密度并不能相提并论,或者说并不能算是线性相关.
 //本规划问题,考虑的四维空间变量,但是在计算node2index时,如果过分强调theta这个纬度上的区分,
 //这会使节点拓展过程中,产生许多空间坐标接近,但角度存在微小差异的点.这降低了搜索效率.
-// delta x=v∫cos(wt) dt ( t_curr  -> t_curr+delta_t)= (v/w)sin(wt) ( t_curr  -> t_curr+delta_t)
+
+// NOTE: Do not directly use v * cos(theta) / sin(theta) for delta_x and delta_y.
+// Although it's a simple approximation, it fails to capture the effect of turning (non-zero angular velocity).
+// This causes many successor nodes to have very similar spatial positions but differ only slightly in heading,
+// leading to a dense and inefficient search in the 4D space (x, y, z, theta).
+//
+// Instead, we use the motion model's integral form to compute delta_x and delta_y when a non-zero turning rate is applied:
+//   delta_x = (v / w) * [sin(theta + w * delta_t) - sin(theta)]
+//   delta_y = -(v / w) * [cos(theta + w * delta_t) - cos(theta)]
+//
+// This better reflects the actual curved path of the AUV under angular motion and avoids redundancy in node expansion.
 
 
   double delta_z = u_vel_z* delat_time;
 
   double delta_t =  u_rate* delat_time;
 
+  // delta x=v∫cos(wt) dt ( t_curr  -> t_curr+delta_t)= (v/w)sin(wt) ( t_curr  -> t_curr+delta_t)
   double delta_x =   input_vel_forward/u_rate*( sin(u_rate*delat_time+curr_theta)-sin(curr_theta));
   double delta_y =  -input_vel_forward/u_rate*( cos(u_rate*delat_time+curr_theta)-cos(curr_theta));
-
-  // if (delta_z!=0)
-  // {
-  //  delta_x =   0.95*input_vel_forward/u_rate*( sin(u_rate*delat_time+curr_theta)-sin(curr_theta));
-  //  delta_y =  -0.95*input_vel_forward/u_rate*( cos(u_rate*delat_time+curr_theta)-cos(curr_theta));
-  // }
-
-  // std::cout<<"delta_x:"<<delta_x<< "   delta_y:"<<delta_y<<"   delta_z:"<<delta_z;
 
   double xSucc = curr_x + delta_x;
   double ySucc = curr_y + delta_y;
@@ -148,12 +104,6 @@ Node4D*Node4D::generateNeibors(const int input_index){
   double tSucc = Helper::normalizeHeadingRad(curr_theta + delta_t);
 
   double newG=calculateG(delta_x,delta_y,delta_z);
-  // std::cout<<"   newG:"<<newG<< std::endl;
-
-
-  // std::cout<<"xSucc:"<<xSucc<< "   ySucc:"<<ySucc<<" zSucc:"<<zSucc<<"  tSucc:"<<tSucc<<std::endl;
-
-//   Node4D* neibor=new Node4D(xSucc, ySucc, zSucc, tSucc, newG, 0, this, i, Direction::Forward);
 
 return new Node4D(xSucc, ySucc, zSucc, tSucc, newG, 0, this, i, Direction::Forward);
 // return neibor;

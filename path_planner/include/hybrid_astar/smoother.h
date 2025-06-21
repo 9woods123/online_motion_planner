@@ -1,3 +1,6 @@
+// Created by Tianyou Yu (woods)
+// Contact: tianyouyu9@163.com
+
 #ifndef SMOOTHER_H
 #define SMOOTHER_H
 
