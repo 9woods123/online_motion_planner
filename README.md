@@ -10,8 +10,8 @@ If you find this work helpful, please consider citing:
 
 ```bibtex
 @inproceedings{nine2025omp,
-  author    = {Woods Nine and Others},
-  title     = {Online Motion Planning for AUVs Using 3D Multibeam Sonar in Unknown Environments},
+  author    = {waiting for publish},
+  title     = {},
   booktitle = {IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
   year      = {2025}
 }
