@@ -3,7 +3,7 @@
 
 **Online Motion Planner** is a trajectory planning framework that uses the A* algorithm to generate a 3d feasible motion trajectories for mobile robots. The planner performs online replanning whenever a potential collision is detected or the planning horizon is reached.
 
-This method is general-purpose and can be applied to various robotic platforms. We have applied it to torpedo-shaped AUVs in a 3D underwater environment, and the method has been peer-reviewed and published at **IROS 2025**.
+This method is general-purpose and can be applied to various robotic platforms. We have applied it to torpedo-shaped AUVs in a 3D underwater environment, and the method has been peer-reviewed and accepted at **IROS 2025**.
 
 If you find this work helpful, please consider citing:
 
