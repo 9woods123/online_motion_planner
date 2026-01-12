@@ -9,11 +9,13 @@ If you find this work helpful, please consider citing:
 
 
 ```bibtex
-@inproceedings{nine2025omp,
-  author    = {waiting for publish},
-  title     = {},
-  booktitle = {IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
-  year      = {2025}
+@inproceedings{yu2025online,
+  title={An Online Motion Planning Framework for Navigating Torpedo-shaped Autonomous Underwater Vehicles in Unknown Underwater Environments},
+  author={Yu, Tianyou and Dong, Zhaoxuan and Wu, Yu and Fu, Xingjie},
+  booktitle={2025 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+  pages={15626--15632},
+  year={2025},
+  organization={IEEE}
 }
 ```
 
